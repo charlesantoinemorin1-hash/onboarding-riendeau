@@ -1,53 +1,26 @@
 require('dotenv').config();
 
-const express    = require('express');
-const nodemailer = require('nodemailer');
-const { google } = require('googleapis');
-const path = require('path');
-const fs   = require('fs');
+const express = require('express');
+const path    = require('path');
+const fs      = require('fs');
+const sgMail  = require('@sendgrid/mail');
 const { DOCS_DIR, MAGASINS, DEPARTEMENTS, getDocuments } = require('./config');
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
 
+// Config SendGrid
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-const GMAIL_CONFIG = {
-  clientId:     process.env.GMAIL_CLIENT_ID     || 'VOTRE_CLIENT_ID',
-  clientSecret: process.env.GMAIL_CLIENT_SECRET || 'VOTRE_CLIENT_SECRET',
-  refreshToken: process.env.GMAIL_REFRESH_TOKEN || 'VOTRE_REFRESH_TOKEN',
-  email:        process.env.GMAIL_EMAIL         || 'votre.courriel@gmail.com',
-};
-
-async function createTransporter() {
-  const oAuth2Client = new google.auth.OAuth2(
-    GMAIL_CONFIG.clientId,
-    GMAIL_CONFIG.clientSecret,
-    'https://developers.google.com/oauthplayground'
-  );
-  oAuth2Client.setCredentials({ refresh_token: GMAIL_CONFIG.refreshToken });
-  const { token: accessToken } = await oAuth2Client.getAccessToken();
-
-  return nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
-    auth: {
-      type:         'OAuth2',
-      user:         GMAIL_CONFIG.email,
-      clientId:     GMAIL_CONFIG.clientId,
-      clientSecret: GMAIL_CONFIG.clientSecret,
-      refreshToken: GMAIL_CONFIG.refreshToken,
-      accessToken,
-    },
-  });
-}
-
+// Routes API pour récupérer magasins / départements
 app.get('/api/magasins',     (req, res) => res.json(MAGASINS));
 app.get('/api/departements', (req, res) => res.json(DEPARTEMENTS));
 
+// Route onboarding
 app.post('/api/onboarding', async (req, res) => {
   const { prenom, nom, courriel, magasin, departement, consentement } = req.body;
 
@@ -55,13 +28,20 @@ app.post('/api/onboarding', async (req, res) => {
     return res.status(400).json({ success: false, message: 'Tous les champs sont requis et le consentement doit être accordé.' });
   }
 
+  // Récupération des documents
   const docs = getDocuments(magasin, departement);
   const attachments = docs
     .map(filename => {
       const filepath = path.join(__dirname, 'docs', filename);
       console.log('Cherche:', filepath, '->', fs.existsSync(filepath) ? 'TROUVE' : 'ABSENT');
       if (!fs.existsSync(filepath)) return null;
-      return { filename, path: filepath };
+      return {
+        filename,
+        path: filepath,
+        content: fs.readFileSync(filepath).toString('base64'),
+        type: 'application/pdf',
+        disposition: 'attachment',
+      };
     })
     .filter(Boolean);
 
@@ -69,6 +49,7 @@ app.post('/api/onboarding', async (req, res) => {
 
   const magasinLabel = MAGASINS.find(m => m.value === magasin)?.label || magasin;
 
+  // HTML du courriel
   const htmlBody = `
 <!DOCTYPE html>
 <html lang="fr">
@@ -134,20 +115,21 @@ app.post('/api/onboarding', async (req, res) => {
 </html>`;
 
   try {
-    const transporter = await createTransporter();
-    await transporter.sendMail({
-      from:        `"Marchés Riendeau" <${GMAIL_CONFIG.email}>`,
-      to:          courriel,
-      subject:     `Bienvenue chez ${magasinLabel}, ${prenom} !`,
-      html:        htmlBody,
+    const msg = {
+      to: courriel,
+      from: process.env.SENDGRID_SENDER_EMAIL,
+      subject: `Bienvenue chez ${magasinLabel}, ${prenom}!`,
+      html: htmlBody,
       attachments,
-    });
+    };
+
+    await sgMail.send(msg);
 
     console.log(`[${new Date().toISOString()}] Courriel envoye a ${courriel} - ${magasinLabel} / ${departement} - ${attachments.length} pieces jointes`);
     res.json({ success: true });
   } catch (err) {
     console.error('Erreur envoi courriel:', err.message);
-    res.status(500).json({ success: false, message: "Erreur lors de l'envoi du courriel. Vérifie la configuration Gmail." });
+    res.status(500).json({ success: false, message: "Erreur lors de l'envoi du courriel. Vérifie la configuration SendGrid." });
   }
 });
 

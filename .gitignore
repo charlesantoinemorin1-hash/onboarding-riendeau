@@ -1,4 +1,15 @@
-node_modules
+# Node
+node_modules/
+npm-debug.log
 .env
+
+# OS
 .DS_Store
+Thumbs.db
+
+# Logs
+logs/
 *.log
+
+# Railway / autres secrets
+.railway/
