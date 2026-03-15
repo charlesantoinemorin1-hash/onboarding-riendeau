@@ -8,6 +8,15 @@ const DOCS_COMMUNS = [
   "3-Manuel de employe 2025.pdf",
 ];
 
+// Conventions collectives par magasin
+const CONVENTIONS_COLLECTIVES = {
+  'beloeil':      "Convention collective Beloeil.pdf",
+  'st-hilaire':   "Convention collective Mont-Saint-Hilaire.pdf",
+  'ste-julie':    "Convention collective Sainte-Julie.pdf",
+  'st-hubert':    "Convention collective Saint-Hubert.pdf",
+  'st-hyacinthe': "Convention collective Saint-Hyacinthe.pdf",
+};
+
 // Document syndicat — Beloeil seulement
 const DOC_SYNDICAT = "1-Syndicat Beloeil STTPM.pdf";
 const MAGASINS_SYNDICAT = ['beloeil'];
@@ -58,6 +67,10 @@ function getDocuments(magasin, departement) {
   if (MAGASINS_SYNDICAT.includes(magasin.toLowerCase())) {
     docs.push(DOC_SYNDICAT);
   }
+  
+  // Convention collective selon magasin
+  const convention = CONVENTIONS_COLLECTIVES[magasin.toLowerCase()];
+  if (convention) docs.push(convention);
 
   // Fiche de tâches selon département
   const key = departement.toLowerCase();
@@ -73,4 +86,4 @@ function getDocuments(magasin, departement) {
   return docs;
 }
 
-module.exports = { DOCS_DIR, DOCS_COMMUNS, DOC_SYNDICAT, FICHES_TACHES, MAGASINS, DEPARTEMENTS, getDocuments };
+module.exports = { DOCS_DIR, DOCS_COMMUNS, DOC_SYNDICAT, CONVENTIONS_COLLECTIVES, FICHES_TACHES, MAGASINS, DEPARTEMENTS, getDocuments };
