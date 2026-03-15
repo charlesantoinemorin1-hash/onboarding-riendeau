@@ -116,12 +116,12 @@ app.post('/api/onboarding', async (req, res) => {
 
   try {
     const msg = {
-      to: courriel,
-      from: process.env.SENDGRID_SENDER_EMAIL,
-      subject: `Bienvenue chez ${magasinLabel}, ${prenom}!`,
-      html: htmlBody,
-      attachments,
-    };
+  to: courriel,
+  from: process.env.FROM_EMAIL,
+  subject: `Bienvenue chez ${magasinLabel}, ${prenom}!`,
+  html: htmlBody,
+  attachments,
+};
 
     await sgMail.send(msg);
 
