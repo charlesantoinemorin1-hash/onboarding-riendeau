@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Back-office — Marchés Riendeau</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --red:#e31837;--red-dark:#b5121d;--red-light:#fff5f5;
+  --green:#16a34a;--green-light:#f0fdf4;--green-border:#86efac;
+  --amber:#d97706;--amber-light:#fffbeb;--amber-border:#fcd34d;
+  --blue:#2563eb;--blue-light:#eff6ff;
+  --text:#1a1a1a;--muted:#6b7280;--light:#9ca3af;--border:#e5e7eb;--bg:#f7f7f7;
+  --card:white;--shadow:0 1px 12px rgba(0,0,0,.06);
+  --sans:'DM Sans',sans-serif;--radius:10px;
+}
+html{font-family:var(--sans);color:var(--text);background:var(--bg);}
+body{min-height:100vh;}
+
+/* ─── LOGIN ─── */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+.login-card{background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:48px 44px;width:100%;max-width:400px;text-align:center;}
+.login-card .bar{width:60px;height:4px;background:var(--red);border-radius:2px;margin:0 auto 28px;}
+.login-card h1{font-size:22px;font-weight:700;margin-bottom:6px;}
+.login-card p{font-size:13px;color:var(--muted);margin-bottom:28px;}
+.login-card .field{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;text-align:left;}
+.login-card label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--muted);}
+.login-card input{padding:11px 13px;border:1.5px solid var(--border);border-radius:8px;font-family:var(--sans);font-size:14px;transition:border-color .15s;}
+.login-card input:focus{outline:none;border-color:var(--red);}
+.login-card .btn{margin-top:8px;width:100%;padding:12px;background:var(--red);color:white;border:none;border-radius:9px;font-family:var(--sans);font-size:14px;font-weight:600;cursor:pointer;transition:background .15s;}
+.login-card .btn:hover{background:var(--red-dark);}
+.login-card .alert{display:none;margin-bottom:14px;padding:10px;background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;font-size:13px;color:#dc2626;}
+
+/* ─── SHELL ─── */
+.shell{display:none;min-height:100vh;}
+.topbar{background:white;border-bottom:1px solid var(--border);padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.topbar-left{display:flex;align-items:center;gap:12px;}
+.topbar-left .brand{font-size:15px;font-weight:700;color:var(--red);}
+.topbar-left .sep{width:1px;height:20px;background:var(--border);}
+.topbar-left .role-badge{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:3px 10px;border-radius:20px;background:var(--red-light);color:var(--red);}
+.topbar-right{display:flex;align-items:center;gap:16px;}
+.topbar-right .user-name{font-size:13px;color:var(--muted);}
+.topbar-right .btn-logout{padding:6px 14px;border:1.5px solid var(--border);border-radius:7px;background:white;font-family:var(--sans);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;}
+.topbar-right .btn-logout:hover{border-color:var(--red);color:var(--red);}
+
+.layout{display:flex;min-height:calc(100vh - 56px);}
+.sidebar{width:220px;background:white;border-right:1px solid var(--border);padding:20px 0;flex-shrink:0;}
+.sidebar a{display:flex;align-items:center;gap:10px;padding:10px 24px;font-size:13px;font-weight:500;color:var(--muted);text-decoration:none;transition:all .12s;cursor:pointer;}
+.sidebar a:hover{color:var(--text);background:#fafafa;}
+.sidebar a.active{color:var(--red);background:var(--red-light);font-weight:600;border-right:3px solid var(--red);}
+.sidebar a .ico{font-size:16px;width:20px;text-align:center;}
+.sidebar .sep{height:1px;background:var(--border);margin:12px 24px;}
+
+.main{flex:1;padding:28px 32px;overflow-x:auto;}
+.page{display:none;}
+.page.active{display:block;}
+.page-head{margin-bottom:24px;}
+.page-head h2{font-size:20px;font-weight:700;margin-bottom:4px;}
+.page-head p{font-size:13px;color:var(--muted);}
+
+/* ─── CARDS & STATS ─── */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:28px;}
+.stat{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 22px;}
+.stat .label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:6px;}
+.stat .value{font-size:28px;font-weight:700;}
+.stat .sub{font-size:11px;color:var(--light);margin-top:4px;}
+.stat.red .value{color:var(--red);}
+.stat.green .value{color:var(--green);}
+.stat.amber .value{color:var(--amber);}
+.stat.blue .value{color:var(--blue);}
+
+/* ─── FILTERS ─── */
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;align-items:center;}
+.filters select,.filters input{padding:8px 12px;border:1.5px solid var(--border);border-radius:7px;font-family:var(--sans);font-size:13px;background:white;transition:border-color .15s;}
+.filters select:focus,.filters input:focus{outline:none;border-color:var(--red);}
+.filters input[type=search]{width:220px;}
+.btn-sm{padding:8px 16px;border:none;border-radius:7px;font-family:var(--sans);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;}
+.btn-primary{background:var(--red);color:white;}
+.btn-primary:hover{background:var(--red-dark);}
+.btn-outline{background:white;border:1.5px solid var(--border);color:var(--text);}
+.btn-outline:hover{border-color:var(--red);color:var(--red);}
+.btn-green{background:var(--green);color:white;}
+.btn-green:hover{background:#15803d;}
+.btn-danger{background:#dc2626;color:white;}
+.btn-danger:hover{background:#b91c1c;}
+
+/* ─── TABLE ─── */
+.table-wrap{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead{background:#fafafa;border-bottom:1.5px solid var(--border);}
+th{padding:12px 16px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);}
+td{padding:11px 16px;border-bottom:1px solid #f3f3f3;vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover{background:#fafafa;}
+.badge-status{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;}
+.badge-envoyé{background:var(--blue-light);color:var(--blue);}
+.badge-complété{background:var(--green-light);color:var(--green);}
+.badge-erreur{background:var(--red-light);color:#dc2626;}
+.badge-actif{background:var(--green-light);color:var(--green);}
+.badge-probation{background:var(--amber-light);color:var(--amber);}
+.badge-terminé{background:#f3f4f6;color:var(--muted);}
+.badge-admin{background:var(--red-light);color:var(--red);}
+.badge-cadre{background:var(--blue-light);color:var(--blue);}
+.badge-inactif{background:#f3f4f6;color:var(--light);}
+.actions{display:flex;gap:6px;}
+.actions button{padding:5px 10px;border:1px solid var(--border);border-radius:5px;background:white;font-family:var(--sans);font-size:11px;cursor:pointer;transition:all .12s;}
+.actions button:hover{border-color:var(--red);color:var(--red);}
+.empty-state{padding:48px;text-align:center;color:var(--muted);font-size:14px;}
+
+/* ─── MODAL ─── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.show{display:flex;}
+.modal{background:white;border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,.15);padding:32px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;}
+.modal h3{font-size:18px;font-weight:700;margin-bottom:6px;}
+.modal p.sub{font-size:13px;color:var(--muted);margin-bottom:20px;}
+.modal .field{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
+.modal label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--muted);}
+.modal input,.modal select{padding:10px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:var(--sans);font-size:14px;}
+.modal input:focus,.modal select:focus{outline:none;border-color:var(--red);}
+.modal .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.modal-foot{display:flex;justify-content:flex-end;gap:10px;margin-top:20px;}
+.modal .alert{margin-bottom:14px;padding:10px;background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;font-size:13px;color:#dc2626;display:none;}
+
+@media(max-width:768px){
+  .sidebar{display:none;}
+  .main{padding:16px;}
+  .stats{grid-template-columns:1fr 1fr;}
+  .filters{flex-direction:column;}
+  .modal{padding:24px 20px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ LOGIN ═══════════════ -->
+<div class="login-wrap" id="loginWrap">
+  <div class="login-card">
+    <div class="bar"></div>
+    <h1>Back-office</h1>
+    <p>Marchés Riendeau — Portail administratif</p>
+    <div class="alert" id="loginAlert"></div>
+    <form id="loginForm">
+      <div class="field">
+        <label>Nom d'utilisateur</label>
+        <input type="text" id="loginUser" autocomplete="username" required>
+      </div>
+      <div class="field">
+        <label>Mot de passe</label>
+        <input type="password" id="loginPass" autocomplete="current-password" required>
+      </div>
+      <button type="submit" class="btn">Se connecter</button>
+    </form>
+  </div>
+</div>
+
+<!-- ═══════════════ APP SHELL ═══════════════ -->
+<div class="shell" id="shell">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <span class="brand">Marchés Riendeau</span>
+      <span class="sep"></span>
+      <span class="role-badge" id="roleBadge"></span>
+    </div>
+    <div class="topbar-right">
+      <span class="user-name" id="userName"></span>
+      <button class="btn-logout" onclick="doLogout()">Déconnexion</button>
+    </div>
+  </div>
+
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebar">
+      <a onclick="showPage('dashboard')" data-page="dashboard" class="active">
+        <span class="ico">📊</span> Tableau de bord
+      </a>
+      <a onclick="showPage('employees')" data-page="employees">
+        <span class="ico">👥</span> Employés
+      </a>
+      <a onclick="showPage('onboarding')" data-page="onboarding">
+        <span class="ico">📬</span> Onboarding
+      </a>
+      <div class="sep"></div>
+      <a onclick="showPage('users')" data-page="users" id="navUsers">
+        <span class="ico">⚙️</span> Gestionnaires
+      </a>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main">
+
+      <!-- ═══ DASHBOARD ═══ -->
+      <div class="page active" id="page-dashboard">
+        <div class="page-head">
+          <h2>Tableau de bord</h2>
+          <p>Vue d'ensemble de l'activité</p>
+        </div>
+        <div class="stats" id="statsGrid"></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Derniers onboardings</th><th>Magasin</th><th>Département</th><th>Date</th><th>Statut</th></tr></thead>
+            <tbody id="recentLogs"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ═══ EMPLOYEES ═══ -->
+      <div class="page" id="page-employees">
+        <div class="page-head">
+          <h2>Employés</h2>
+          <p>Fiches et profils de tous les employés</p>
+        </div>
+        <div class="filters">
+          <input type="search" id="empSearch" placeholder="Rechercher un employé…" oninput="loadEmployees()">
+          <select id="empMagasin" onchange="loadEmployees()"><option value="">Tous les magasins</option></select>
+          <select id="empDept" onchange="loadEmployees()"><option value="">Tous les départements</option></select>
+          <select id="empStatut" onchange="loadEmployees()"><option value="">Tous les statuts</option><option value="actif">Actif</option><option value="probation">Probation</option><option value="terminé">Terminé</option></select>
+          <button class="btn-sm btn-primary" id="btnAddEmp" onclick="openEmployeeModal()">+ Ajouter</button>
+          <button class="btn-sm btn-outline" id="btnExportEmp" onclick="exportCSV('employees')">Exporter CSV</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Nom</th><th>Courriel</th><th>Magasin</th><th>Département</th><th>Embauche</th><th>Statut</th><th id="thEmpActions">Actions</th></tr></thead>
+            <tbody id="empBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ═══ ONBOARDING ═══ -->
+      <div class="page" id="page-onboarding">
+        <div class="page-head">
+          <h2>Suivi des onboardings</h2>
+          <p>Historique de tous les envois de documents</p>
+        </div>
+        <div class="filters">
+          <select id="logMagasin" onchange="loadLogs()"><option value="">Tous les magasins</option></select>
+          <select id="logDept" onchange="loadLogs()"><option value="">Tous les départements</option></select>
+          <select id="logStatut" onchange="loadLogs()"><option value="">Tous les statuts</option><option value="envoyé">Envoyé</option><option value="complété">Complété</option><option value="erreur">Erreur</option></select>
+          <button class="btn-sm btn-outline" id="btnExportLog" onclick="exportCSV('onboarding')">Exporter CSV</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Nom</th><th>Courriel</th><th>Magasin</th><th>Département</th><th>Documents</th><th>Date</th><th>Statut</th><th id="thLogActions">Actions</th></tr></thead>
+            <tbody id="logBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ═══ USERS (ADMIN ONLY) ═══ -->
+      <div class="page" id="page-users">
+        <div class="page-head">
+          <h2>Gestion des gestionnaires</h2>
+          <p>Créer et gérer les comptes admin et cadre</p>
+        </div>
+        <div class="filters">
+          <button class="btn-sm btn-primary" onclick="openUserModal()">+ Nouveau compte</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Nom</th><th>Username</th><th>Rôle</th><th>Magasin</th><th>Statut</th><th>Actions</th></tr></thead>
+            <tbody id="usersBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ MODAL EMPLOYÉ ═══════════════ -->
+<div class="modal-overlay" id="empModal">
+  <div class="modal">
+    <h3 id="empModalTitle">Ajouter un employé</h3>
+    <p class="sub">Remplis les informations de l'employé</p>
+    <div class="alert" id="empModalAlert"></div>
+    <input type="hidden" id="empEditId">
+    <div class="row2">
+      <div class="field"><label>Prénom</label><input type="text" id="empPrenom"></div>
+      <div class="field"><label>Nom</label><input type="text" id="empNom"></div>
+    </div>
+    <div class="field"><label>Courriel</label><input type="email" id="empCourriel"></div>
+    <div class="row2">
+      <div class="field"><label>Magasin</label><select id="empMagasinModal"></select></div>
+      <div class="field"><label>Département</label><select id="empDeptModal"></select></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Date d'embauche</label><input type="date" id="empDate"></div>
+      <div class="field"><label>Statut</label>
+        <select id="empStatutModal"><option value="actif">Actif</option><option value="probation">Probation</option><option value="terminé">Terminé</option></select>
+      </div>
+    </div>
+    <div class="field"><label>Notes</label><input type="text" id="empNotes" placeholder="Optionnel"></div>
+    <div class="modal-foot">
+      <button class="btn-sm btn-outline" onclick="closeModal('empModal')">Annuler</button>
+      <button class="btn-sm btn-primary" onclick="saveEmployee()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ MODAL USER ═══════════════ -->
+<div class="modal-overlay" id="userModal">
+  <div class="modal">
+    <h3 id="userModalTitle">Nouveau compte</h3>
+    <p class="sub">Créer un accès gestionnaire</p>
+    <div class="alert" id="userModalAlert"></div>
+    <input type="hidden" id="userEditId">
+    <div class="field"><label>Nom complet</label><input type="text" id="userNom"></div>
+    <div class="field"><label>Nom d'utilisateur</label><input type="text" id="userUsername"></div>
+    <div class="field"><label>Mot de passe</label><input type="password" id="userPassword" placeholder="Min. 6 caractères"></div>
+    <div class="row2">
+      <div class="field"><label>Rôle</label>
+        <select id="userRole" onchange="toggleMagasinField()"><option value="cadre">Cadre</option><option value="admin">Admin</option></select>
+      </div>
+      <div class="field" id="userMagasinField"><label>Magasin assigné</label><select id="userMagasin"></select></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-sm btn-outline" onclick="closeModal('userModal')">Annuler</button>
+      <button class="btn-sm btn-primary" onclick="saveUser()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── STATE ──────────────────────────────────────────────────────
+let currentUser = null;
+let magasins = [];
+let departements = [];
+
+// ─── API HELPERS ────────────────────────────────────────────────
+async function api(path, opts = {}) {
+  const res = await fetch('/api/admin' + path, {
+    ...opts,
+    headers: { 'Content-Type': 'application/json', ...opts.headers },
+    body: opts.body ? JSON.stringify(opts.body) : undefined,
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Erreur');
+  return data;
+}
+
+// ─── AUTH ───────────────────────────────────────────────────────
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const al = document.getElementById('loginAlert');
+  al.style.display = 'none';
+  try {
+    const data = await api('/login', {
+      method: 'POST',
+      body: { username: document.getElementById('loginUser').value, password: document.getElementById('loginPass').value },
+    });
+    currentUser = data.user;
+    enterApp();
+  } catch (err) {
+    al.textContent = err.message;
+    al.style.display = 'block';
+  }
+});
+
+async function checkAuth() {
+  try {
+    const data = await api('/me');
+    currentUser = data.user;
+    enterApp();
+  } catch { /* pas connecté */ }
+}
+
+async function doLogout() {
+  await api('/logout', { method: 'POST' });
+  currentUser = null;
+  document.getElementById('shell').style.display = 'none';
+  document.getElementById('loginWrap').style.display = 'flex';
+}
+
+function enterApp() {
+  document.getElementById('loginWrap').style.display = 'none';
+  document.getElementById('shell').style.display = 'block';
+  document.getElementById('userName').textContent = currentUser.nom_complet;
+  document.getElementById('roleBadge').textContent = currentUser.role;
+
+  // Cacher les éléments admin pour les cadres
+  const isAdmin = currentUser.role === 'admin';
+  document.getElementById('navUsers').style.display = isAdmin ? '' : 'none';
+  document.getElementById('btnAddEmp').style.display = isAdmin ? '' : 'none';
+  document.getElementById('btnExportEmp').style.display = isAdmin ? '' : 'none';
+  document.getElementById('btnExportLog').style.display = isAdmin ? '' : 'none';
+  document.getElementById('thEmpActions').style.display = isAdmin ? '' : 'none';
+  document.getElementById('thLogActions').style.display = isAdmin ? '' : 'none';
+
+  // Cacher le filtre magasin pour les cadres (ils voient juste le leur)
+  if (!isAdmin) {
+    document.querySelectorAll('#empMagasin, #logMagasin').forEach(s => s.style.display = 'none');
+  }
+
+  loadOptions();
+  showPage('dashboard');
+}
+
+// ─── NAVIGATION ─────────────────────────────────────────────────
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  document.querySelector(`[data-page="${name}"]`)?.classList.add('active');
+
+  if (name === 'dashboard') loadDashboard();
+  else if (name === 'employees') loadEmployees();
+  else if (name === 'onboarding') loadLogs();
+  else if (name === 'users') loadUsers();
+}
+
+// ─── OPTIONS (magasins, départements) ───────────────────────────
+async function loadOptions() {
+  magasins = await fetch('/api/magasins').then(r => r.json());
+  departements = await fetch('/api/departements').then(r => r.json());
+
+  const selectors = ['empMagasin', 'logMagasin', 'empMagasinModal', 'userMagasin'];
+  selectors.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const firstOpt = el.options[0];
+    el.innerHTML = '';
+    if (firstOpt && firstOpt.value === '') el.appendChild(firstOpt);
+    magasins.forEach(m => {
+      const o = document.createElement('option');
+      o.value = m.value;
+      o.textContent = m.label;
+      el.appendChild(o);
+    });
+  });
+
+  ['empDept', 'logDept', 'empDeptModal'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const firstOpt = el.options[0];
+    el.innerHTML = '';
+    if (firstOpt && firstOpt.value === '') el.appendChild(firstOpt);
+    departements.forEach(d => {
+      const o = document.createElement('option');
+      o.value = d;
+      o.textContent = d;
+      el.appendChild(o);
+    });
+  });
+}
+
+// ─── DASHBOARD ──────────────────────────────────────────────────
+async function loadDashboard() {
+  try {
+    const stats = await api('/dashboard');
+    document.getElementById('statsGrid').innerHTML = `
+      <div class="stat blue"><div class="label">Total employés</div><div class="value">${stats.totalEmployes}</div></div>
+      <div class="stat amber"><div class="label">En probation</div><div class="value">${stats.enProbation}</div></div>
+      <div class="stat green"><div class="label">Onboardings complétés</div><div class="value">${stats.onboardingsCompletes}</div><div class="sub">sur ${stats.totalOnboardings} envoyés</div></div>
+      <div class="stat red"><div class="label">30 derniers jours</div><div class="value">${stats.recent}</div><div class="sub">nouveaux onboardings</div></div>
+    `;
+
+    const logs = await api('/onboarding-logs');
+    const recent = logs.slice(0, 10);
+    document.getElementById('recentLogs').innerHTML = recent.length
+      ? recent.map(l => `<tr>
+          <td><strong>${l.prenom} ${l.nom}</strong></td>
+          <td>${magLabel(l.magasin)}</td>
+          <td>${l.departement}</td>
+          <td>${formatDate(l.created_at)}</td>
+          <td><span class="badge-status badge-${l.statut}">${l.statut}</span></td>
+        </tr>`).join('')
+      : '<tr><td colspan="5" class="empty-state">Aucun onboarding enregistré</td></tr>';
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+// ─── EMPLOYEES ──────────────────────────────────────────────────
+async function loadEmployees() {
+  const params = new URLSearchParams();
+  const search = document.getElementById('empSearch').value;
+  const mag = document.getElementById('empMagasin').value;
+  const dept = document.getElementById('empDept').value;
+  const statut = document.getElementById('empStatut').value;
+  if (search) params.set('search', search);
+  if (mag) params.set('magasin', mag);
+  if (dept) params.set('departement', dept);
+  if (statut) params.set('statut', statut);
+
+  try {
+    const emps = await api('/employees?' + params);
+    const isAdmin = currentUser.role === 'admin';
+    document.getElementById('empBody').innerHTML = emps.length
+      ? emps.map(e => `<tr>
+          <td><strong>${e.prenom} ${e.nom}</strong></td>
+          <td>${e.courriel}</td>
+          <td>${magLabel(e.magasin)}</td>
+          <td>${e.departement}</td>
+          <td>${e.date_embauche || '—'}</td>
+          <td><span class="badge-status badge-${e.statut}">${e.statut}</span></td>
+          ${isAdmin ? `<td class="actions">
+            <button onclick="editEmployee(${e.id})">Modifier</button>
+            <button onclick="deleteEmployee(${e.id},'${e.prenom} ${e.nom}')">Supprimer</button>
+          </td>` : ''}
+        </tr>`).join('')
+      : `<tr><td colspan="${isAdmin ? 7 : 6}" class="empty-state">Aucun employé trouvé</td></tr>`;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+function openEmployeeModal(emp = null) {
+  document.getElementById('empModalTitle').textContent = emp ? 'Modifier l\'employé' : 'Ajouter un employé';
+  document.getElementById('empEditId').value = emp ? emp.id : '';
+  document.getElementById('empPrenom').value = emp ? emp.prenom : '';
+  document.getElementById('empNom').value = emp ? emp.nom : '';
+  document.getElementById('empCourriel').value = emp ? emp.courriel : '';
+  document.getElementById('empMagasinModal').value = emp ? emp.magasin : '';
+  document.getElementById('empDeptModal').value = emp ? emp.departement : '';
+  document.getElementById('empDate').value = emp ? emp.date_embauche || '' : '';
+  document.getElementById('empStatutModal').value = emp ? emp.statut : 'actif';
+  document.getElementById('empNotes').value = emp ? emp.notes || '' : '';
+  document.getElementById('empModalAlert').style.display = 'none';
+  document.getElementById('empModal').classList.add('show');
+}
+
+async function editEmployee(id) {
+  try {
+    const emp = await api('/employees/' + id);
+    openEmployeeModal(emp);
+  } catch (err) {
+    alert(err.message);
+  }
+}
+
+async function saveEmployee() {
+  const al = document.getElementById('empModalAlert');
+  const id = document.getElementById('empEditId').value;
+  const body = {
+    prenom: document.getElementById('empPrenom').value.trim(),
+    nom: document.getElementById('empNom').value.trim(),
+    courriel: document.getElementById('empCourriel').value.trim(),
+    magasin: document.getElementById('empMagasinModal').value,
+    departement: document.getElementById('empDeptModal').value,
+    date_embauche: document.getElementById('empDate').value,
+    statut: document.getElementById('empStatutModal').value,
+    notes: document.getElementById('empNotes').value.trim(),
+  };
+
+  if (!body.prenom || !body.nom || !body.courriel || !body.magasin || !body.departement) {
+    al.textContent = 'Tous les champs obligatoires doivent être remplis.';
+    al.style.display = 'block';
+    return;
+  }
+
+  try {
+    if (id) {
+      await api('/employees/' + id, { method: 'PUT', body });
+    } else {
+      await api('/employees', { method: 'POST', body });
+    }
+    closeModal('empModal');
+    loadEmployees();
+  } catch (err) {
+    al.textContent = err.message;
+    al.style.display = 'block';
+  }
+}
+
+async function deleteEmployee(id, name) {
+  if (!confirm(`Supprimer ${name} ?`)) return;
+  try {
+    await api('/employees/' + id, { method: 'DELETE' });
+    loadEmployees();
+  } catch (err) {
+    alert(err.message);
+  }
+}
+
+// ─── ONBOARDING LOGS ────────────────────────────────────────────
+async function loadLogs() {
+  const params = new URLSearchParams();
+  const mag = document.getElementById('logMagasin').value;
+  const dept = document.getElementById('logDept').value;
+  const statut = document.getElementById('logStatut').value;
+  if (mag) params.set('magasin', mag);
+  if (dept) params.set('departement', dept);
+  if (statut) params.set('statut', statut);
+
+  try {
+    const logs = await api('/onboarding-logs?' + params);
+    const isAdmin = currentUser.role === 'admin';
+    document.getElementById('logBody').innerHTML = logs.length
+      ? logs.map(l => {
+          const docs = safeJSON(l.documents_envoyes);
+          return `<tr>
+            <td><strong>${l.prenom} ${l.nom}</strong></td>
+            <td>${l.courriel}</td>
+            <td>${magLabel(l.magasin)}</td>
+            <td>${l.departement}</td>
+            <td title="${docs.join(', ')}">${docs.length} doc${docs.length > 1 ? 's' : ''}</td>
+            <td>${formatDate(l.created_at)}</td>
+            <td><span class="badge-status badge-${l.statut}">${l.statut}</span></td>
+            ${isAdmin ? `<td class="actions">
+              ${l.statut === 'envoyé' ? `<button class="btn-sm btn-green" onclick="markComplete(${l.id})">Complété</button>` : ''}
+            </td>` : ''}
+          </tr>`;
+        }).join('')
+      : `<tr><td colspan="${isAdmin ? 8 : 7}" class="empty-state">Aucun onboarding enregistré</td></tr>`;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+async function markComplete(id) {
+  try {
+    await api('/onboarding-logs/' + id + '/status', { method: 'PUT', body: { statut: 'complété' } });
+    loadLogs();
+    loadDashboard();
+  } catch (err) {
+    alert(err.message);
+  }
+}
+
+// ─── USERS MANAGEMENT (ADMIN) ───────────────────────────────────
+async function loadUsers() {
+  try {
+    const users = await api('/users');
+    document.getElementById('usersBody').innerHTML = users.map(u => `<tr>
+      <td><strong>${u.nom_complet}</strong></td>
+      <td>${u.username}</td>
+      <td><span class="badge-status badge-${u.role}">${u.role}</span></td>
+      <td>${u.magasin ? magLabel(u.magasin) : 'Tous'}</td>
+      <td><span class="badge-status ${u.actif ? 'badge-actif' : 'badge-inactif'}">${u.actif ? 'Actif' : 'Inactif'}</span></td>
+      <td class="actions">
+        <button onclick="editUser(${u.id})">Modifier</button>
+        <button onclick="toggleUser(${u.id}, ${u.actif})">${u.actif ? 'Désactiver' : 'Activer'}</button>
+      </td>
+    </tr>`).join('');
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+function openUserModal(user = null) {
+  document.getElementById('userModalTitle').textContent = user ? 'Modifier le compte' : 'Nouveau compte';
+  document.getElementById('userEditId').value = user ? user.id : '';
+  document.getElementById('userNom').value = user ? user.nom_complet : '';
+  document.getElementById('userUsername').value = user ? user.username : '';
+  document.getElementById('userUsername').disabled = !!user;
+  document.getElementById('userPassword').value = '';
+  document.getElementById('userPassword').placeholder = user ? 'Laisser vide pour garder' : 'Min. 6 caractères';
+  document.getElementById('userRole').value = user ? user.role : 'cadre';
+  document.getElementById('userMagasin').value = user ? user.magasin || '' : '';
+  document.getElementById('userModalAlert').style.display = 'none';
+  toggleMagasinField();
+  document.getElementById('userModal').classList.add('show');
+}
+
+async function editUser(id) {
+  try {
+    const users = await api('/users');
+    const user = users.find(u => u.id === id);
+    if (user) openUserModal(user);
+  } catch (err) {
+    alert(err.message);
+  }
+}
+
+function toggleMagasinField() {
+  const role = document.getElementById('userRole').value;
+  document.getElementById('userMagasinField').style.display = role === 'cadre' ? '' : 'none';
+}
+
+async function saveUser() {
+  const al = document.getElementById('userModalAlert');
+  const id = document.getElementById('userEditId').value;
+  const body = {
+    nom_complet: document.getElementById('userNom').value.trim(),
+    username: document.getElementById('userUsername').value.trim(),
+    password: document.getElementById('userPassword').value,
+    role: document.getElementById('userRole').value,
+    magasin: document.getElementById('userMagasin').value,
+  };
+
+  if (!body.nom_complet || !body.username) {
+    al.textContent = 'Nom et username requis.';
+    al.style.display = 'block';
+    return;
+  }
+  if (!id && (!body.password || body.password.length < 6)) {
+    al.textContent = 'Le mot de passe doit contenir au moins 6 caractères.';
+    al.style.display = 'block';
+    return;
+  }
+  if (body.role === 'cadre' && !body.magasin) {
+    al.textContent = 'Un cadre doit être assigné à un magasin.';
+    al.style.display = 'block';
+    return;
+  }
+
+  try {
+    if (id) {
+      await api('/users/' + id, { method: 'PUT', body });
+    } else {
+      await api('/users', { method: 'POST', body });
+    }
+    closeModal('userModal');
+    loadUsers();
+  } catch (err) {
+    al.textContent = err.message;
+    al.style.display = 'block';
+  }
+}
+
+async function toggleUser(id, actif) {
+  const action = actif ? 'désactiver' : 'activer';
+  if (!confirm(`Voulez-vous ${action} ce compte ?`)) return;
+  try {
+    await api('/users/' + id + '/toggle', { method: 'PUT' });
+    loadUsers();
+  } catch (err) {
+    alert(err.message);
+  }
+}
+
+// ─── EXPORT CSV ─────────────────────────────────────────────────
+function exportCSV(type) {
+  const mag = type === 'employees'
+    ? document.getElementById('empMagasin').value
+    : document.getElementById('logMagasin').value;
+  const url = `/api/admin/export/${type}${mag ? '?magasin=' + mag : ''}`;
+  window.open(url, '_blank');
+}
+
+// ─── HELPERS ────────────────────────────────────────────────────
+function magLabel(val) {
+  const m = magasins.find(m => m.value === val);
+  return m ? m.label : val;
+}
+
+function formatDate(d) {
+  if (!d) return '—';
+  const dt = new Date(d);
+  return dt.toLocaleDateString('fr-CA', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+function safeJSON(s) {
+  try { return JSON.parse(s) || []; } catch { return []; }
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('show');
+}
+
+// Close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(el => {
+  el.addEventListener('click', (e) => {
+    if (e.target === el) el.classList.remove('show');
+  });
+});
+
+// ─── INIT ───────────────────────────────────────────────────────
+checkAuth();
+</script>
+</body>
+</html>
