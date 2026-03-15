@@ -88,6 +88,12 @@ app.post('/api/onboarding', async (req, res) => {
           <p style="color:#333;font-size:15px;line-height:1.7;margin:0 0 12px">
             Si tu as des questions avant ton premier jour, n'hésite pas à communiquer avec ton gestionnaire.
           </p>
+		  
+		  <p style="color:#333;font-size:15px;line-height:1.7;margin:0 0 12px">
+  <strong>Important :</strong> Lors de ton premier jour, n'oublie pas d'apporter un spécimen de chèque
+  avec les documents complétés que tu nous remettras.
+</p>
+
           <p style="color:#333;font-size:15px;line-height:1.7;margin:0">
             On a hâte de te voir !
           </p>
