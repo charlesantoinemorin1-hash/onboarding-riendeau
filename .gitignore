@@ -13,3 +13,7 @@ logs/
 
 # Railway / autres secrets
 .railway/
+node_modules/
+.env
+data.db
+uploads/

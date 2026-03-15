@@ -19,7 +19,7 @@
 html{font-family:var(--sans);color:var(--text);background:var(--bg);}
 body{min-height:100vh;}
 
-/* ─── LOGIN ─── */
+/* LOGIN */
 .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
 .login-card{background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:48px 44px;width:100%;max-width:400px;text-align:center;}
 .login-card .bar{width:60px;height:4px;background:var(--red);border-radius:2px;margin:0 auto 28px;}
@@ -33,7 +33,7 @@ body{min-height:100vh;}
 .login-card .btn:hover{background:var(--red-dark);}
 .login-card .alert{display:none;margin-bottom:14px;padding:10px;background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;font-size:13px;color:#dc2626;}
 
-/* ─── SHELL ─── */
+/* SHELL */
 .shell{display:none;min-height:100vh;}
 .topbar{background:white;border-bottom:1px solid var(--border);padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
 .topbar-left{display:flex;align-items:center;gap:12px;}
@@ -54,39 +54,31 @@ body{min-height:100vh;}
 .sidebar .sep{height:1px;background:var(--border);margin:12px 24px;}
 
 .main{flex:1;padding:28px 32px;overflow-x:auto;}
-.page{display:none;}
-.page.active{display:block;}
+.page{display:none;}.page.active{display:block;}
 .page-head{margin-bottom:24px;}
 .page-head h2{font-size:20px;font-weight:700;margin-bottom:4px;}
 .page-head p{font-size:13px;color:var(--muted);}
 
-/* ─── CARDS & STATS ─── */
+/* STATS */
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:28px;}
 .stat{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 22px;}
 .stat .label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-bottom:6px;}
 .stat .value{font-size:28px;font-weight:700;}
 .stat .sub{font-size:11px;color:var(--light);margin-top:4px;}
-.stat.red .value{color:var(--red);}
-.stat.green .value{color:var(--green);}
-.stat.amber .value{color:var(--amber);}
-.stat.blue .value{color:var(--blue);}
+.stat.red .value{color:var(--red);}.stat.green .value{color:var(--green);}.stat.amber .value{color:var(--amber);}.stat.blue .value{color:var(--blue);}
 
-/* ─── FILTERS ─── */
+/* FILTERS */
 .filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;align-items:center;}
 .filters select,.filters input{padding:8px 12px;border:1.5px solid var(--border);border-radius:7px;font-family:var(--sans);font-size:13px;background:white;transition:border-color .15s;}
 .filters select:focus,.filters input:focus{outline:none;border-color:var(--red);}
 .filters input[type=search]{width:220px;}
 .btn-sm{padding:8px 16px;border:none;border-radius:7px;font-family:var(--sans);font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;}
-.btn-primary{background:var(--red);color:white;}
-.btn-primary:hover{background:var(--red-dark);}
-.btn-outline{background:white;border:1.5px solid var(--border);color:var(--text);}
-.btn-outline:hover{border-color:var(--red);color:var(--red);}
-.btn-green{background:var(--green);color:white;}
-.btn-green:hover{background:#15803d;}
-.btn-danger{background:#dc2626;color:white;}
-.btn-danger:hover{background:#b91c1c;}
+.btn-primary{background:var(--red);color:white;}.btn-primary:hover{background:var(--red-dark);}
+.btn-outline{background:white;border:1.5px solid var(--border);color:var(--text);}.btn-outline:hover{border-color:var(--red);color:var(--red);}
+.btn-green{background:var(--green);color:white;}.btn-green:hover{background:#15803d;}
+.btn-danger{background:#dc2626;color:white;}.btn-danger:hover{background:#b91c1c;}
 
-/* ─── TABLE ─── */
+/* TABLE */
 .table-wrap{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
 table{width:100%;border-collapse:collapse;font-size:13px;}
 thead{background:#fafafa;border-bottom:1.5px solid var(--border);}
@@ -94,6 +86,8 @@ th{padding:12px 16px;text-align:left;font-size:10px;font-weight:700;text-transfo
 td{padding:11px 16px;border-bottom:1px solid #f3f3f3;vertical-align:middle;}
 tr:last-child td{border-bottom:none;}
 tr:hover{background:#fafafa;}
+tr.clickable{cursor:pointer;}
+tr.clickable:hover{background:var(--red-light);}
 .badge-status{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;}
 .badge-envoyé{background:var(--blue-light);color:var(--blue);}
 .badge-complété{background:var(--green-light);color:var(--green);}
@@ -104,12 +98,14 @@ tr:hover{background:#fafafa;}
 .badge-admin{background:var(--red-light);color:var(--red);}
 .badge-cadre{background:var(--blue-light);color:var(--blue);}
 .badge-inactif{background:#f3f4f6;color:var(--light);}
+.badge-syndiqué{background:var(--blue-light);color:var(--blue);}
+.badge-contractuel{background:var(--amber-light);color:var(--amber);}
 .actions{display:flex;gap:6px;}
 .actions button{padding:5px 10px;border:1px solid var(--border);border-radius:5px;background:white;font-family:var(--sans);font-size:11px;cursor:pointer;transition:all .12s;}
 .actions button:hover{border-color:var(--red);color:var(--red);}
 .empty-state{padding:48px;text-align:center;color:var(--muted);font-size:14px;}
 
-/* ─── MODAL ─── */
+/* MODAL */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;align-items:center;justify-content:center;padding:20px;}
 .modal-overlay.show{display:flex;}
 .modal{background:white;border-radius:14px;box-shadow:0 8px 40px rgba(0,0,0,.15);padding:32px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;}
@@ -123,18 +119,48 @@ tr:hover{background:#fafafa;}
 .modal-foot{display:flex;justify-content:flex-end;gap:10px;margin-top:20px;}
 .modal .alert{margin-bottom:14px;padding:10px;background:#fef2f2;border:1px solid #fca5a5;border-radius:8px;font-size:13px;color:#dc2626;display:none;}
 
+/* DRAWER */
+.drawer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:90;transition:opacity .2s;}
+.drawer-overlay.show{display:block;}
+.drawer{position:fixed;top:0;right:-520px;width:500px;max-width:90vw;height:100vh;background:white;box-shadow:-4px 0 30px rgba(0,0,0,.12);z-index:91;transition:right .3s ease;display:flex;flex-direction:column;}
+.drawer.open{right:0;}
+.drawer-head{padding:24px 28px 20px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0;}
+.drawer-head h3{font-size:18px;font-weight:700;}
+.drawer-head .close-btn{width:32px;height:32px;border:1px solid var(--border);border-radius:6px;background:white;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s;}
+.drawer-head .close-btn:hover{border-color:var(--red);color:var(--red);}
+.drawer-body{flex:1;overflow-y:auto;padding:24px 28px;}
+.drawer-section{margin-bottom:28px;}
+.drawer-section h4{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.info-item{display:flex;flex-direction:column;gap:2px;}
+.info-item .info-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:var(--light);}
+.info-item .info-value{font-size:14px;font-weight:500;}
+.info-item.full{grid-column:1/-1;}
+
+/* Document list in drawer */
+.doc-list{display:flex;flex-direction:column;gap:8px;}
+.doc-item{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#fafafa;border-radius:8px;border:1px solid #f0f0f0;}
+.doc-item-left{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0;}
+.doc-item-type{font-size:12px;font-weight:600;}
+.doc-item-meta{font-size:11px;color:var(--muted);}
+.doc-item-actions{display:flex;gap:6px;flex-shrink:0;}
+.doc-item-actions button{padding:4px 8px;border:1px solid var(--border);border-radius:4px;background:white;font-size:10px;font-family:var(--sans);cursor:pointer;transition:all .12s;}
+.doc-item-actions button:hover{border-color:var(--red);color:var(--red);}
+.doc-item-actions .dl-btn:hover{border-color:var(--blue);color:var(--blue);}
+
+/* File input */
+.file-input-wrap{position:relative;}
+.file-input-wrap input[type=file]{font-family:var(--sans);font-size:12px;padding:8px;}
+
 @media(max-width:768px){
-  .sidebar{display:none;}
-  .main{padding:16px;}
-  .stats{grid-template-columns:1fr 1fr;}
-  .filters{flex-direction:column;}
-  .modal{padding:24px 20px;}
+  .sidebar{display:none;}.main{padding:16px;}.stats{grid-template-columns:1fr 1fr;}.filters{flex-direction:column;}.modal{padding:24px 20px;}
+  .drawer{width:100%;max-width:100%;}
 }
 </style>
 </head>
 <body>
 
-<!-- ═══════════════ LOGIN ═══════════════ -->
+<!-- LOGIN -->
 <div class="login-wrap" id="loginWrap">
   <div class="login-card">
     <div class="bar"></div>
@@ -142,28 +168,18 @@ tr:hover{background:#fafafa;}
     <p>Marchés Riendeau — Portail administratif</p>
     <div class="alert" id="loginAlert"></div>
     <form id="loginForm">
-      <div class="field">
-        <label>Nom d'utilisateur</label>
-        <input type="text" id="loginUser" autocomplete="username" required>
-      </div>
-      <div class="field">
-        <label>Mot de passe</label>
-        <input type="password" id="loginPass" autocomplete="current-password" required>
-      </div>
+      <div class="field"><label>Nom d'utilisateur</label><input type="text" id="loginUser" autocomplete="username" required></div>
+      <div class="field"><label>Mot de passe</label><input type="password" id="loginPass" autocomplete="current-password" required></div>
       <button type="submit" class="btn">Se connecter</button>
     </form>
   </div>
 </div>
 
-<!-- ═══════════════ APP SHELL ═══════════════ -->
+<!-- APP SHELL -->
 <div class="shell" id="shell">
-
-  <!-- TOPBAR -->
   <div class="topbar">
     <div class="topbar-left">
-      <span class="brand">Marchés Riendeau</span>
-      <span class="sep"></span>
-      <span class="role-badge" id="roleBadge"></span>
+      <span class="brand">Marchés Riendeau</span><span class="sep"></span><span class="role-badge" id="roleBadge"></span>
     </div>
     <div class="topbar-right">
       <span class="user-name" id="userName"></span>
@@ -172,48 +188,25 @@ tr:hover{background:#fafafa;}
   </div>
 
   <div class="layout">
-
-    <!-- SIDEBAR -->
     <div class="sidebar" id="sidebar">
-      <a onclick="showPage('dashboard')" data-page="dashboard" class="active">
-        <span class="ico">📊</span> Tableau de bord
-      </a>
-      <a onclick="showPage('employees')" data-page="employees">
-        <span class="ico">👥</span> Employés
-      </a>
-      <a onclick="showPage('onboarding')" data-page="onboarding">
-        <span class="ico">📬</span> Onboarding
-      </a>
+      <a onclick="showPage('dashboard')" data-page="dashboard" class="active"><span class="ico">📊</span> Tableau de bord</a>
+      <a onclick="showPage('employees')" data-page="employees"><span class="ico">👥</span> Employés</a>
+      <a onclick="showPage('onboarding')" data-page="onboarding"><span class="ico">📬</span> Onboarding</a>
       <div class="sep"></div>
-      <a onclick="showPage('users')" data-page="users" id="navUsers">
-        <span class="ico">⚙️</span> Gestionnaires
-      </a>
+      <a onclick="showPage('users')" data-page="users" id="navUsers"><span class="ico">⚙️</span> Gestionnaires</a>
     </div>
 
-    <!-- MAIN CONTENT -->
     <div class="main">
-
-      <!-- ═══ DASHBOARD ═══ -->
+      <!-- DASHBOARD -->
       <div class="page active" id="page-dashboard">
-        <div class="page-head">
-          <h2>Tableau de bord</h2>
-          <p>Vue d'ensemble de l'activité</p>
-        </div>
+        <div class="page-head"><h2>Tableau de bord</h2><p>Vue d'ensemble de l'activité</p></div>
         <div class="stats" id="statsGrid"></div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Derniers onboardings</th><th>Magasin</th><th>Département</th><th>Date</th><th>Statut</th></tr></thead>
-            <tbody id="recentLogs"></tbody>
-          </table>
-        </div>
+        <div class="table-wrap"><table><thead><tr><th>Derniers onboardings</th><th>Magasin</th><th>Département</th><th>Date</th><th>Statut</th></tr></thead><tbody id="recentLogs"></tbody></table></div>
       </div>
 
-      <!-- ═══ EMPLOYEES ═══ -->
+      <!-- EMPLOYEES -->
       <div class="page" id="page-employees">
-        <div class="page-head">
-          <h2>Employés</h2>
-          <p>Fiches et profils de tous les employés</p>
-        </div>
+        <div class="page-head"><h2>Employés</h2><p>Cliquer sur un employé pour voir son dossier</p></div>
         <div class="filters">
           <input type="search" id="empSearch" placeholder="Rechercher un employé…" oninput="loadEmployees()">
           <select id="empMagasin" onchange="loadEmployees()"><option value="">Tous les magasins</option></select>
@@ -222,166 +215,153 @@ tr:hover{background:#fafafa;}
           <button class="btn-sm btn-primary" id="btnAddEmp" onclick="openEmployeeModal()">+ Ajouter</button>
           <button class="btn-sm btn-outline" id="btnExportEmp" onclick="exportCSV('employees')">Exporter CSV</button>
         </div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Nom</th><th>Courriel</th><th>Magasin</th><th>Département</th><th>Embauche</th><th>Statut</th><th id="thEmpActions">Actions</th></tr></thead>
-            <tbody id="empBody"></tbody>
-          </table>
-        </div>
+        <div class="table-wrap"><table><thead><tr><th>Nom</th><th>Courriel</th><th>Magasin</th><th>Département</th><th>Type</th><th>Embauche</th><th>Statut</th><th id="thEmpActions">Actions</th></tr></thead><tbody id="empBody"></tbody></table></div>
       </div>
 
-      <!-- ═══ ONBOARDING ═══ -->
+      <!-- ONBOARDING -->
       <div class="page" id="page-onboarding">
-        <div class="page-head">
-          <h2>Suivi des onboardings</h2>
-          <p>Historique de tous les envois de documents</p>
-        </div>
+        <div class="page-head"><h2>Suivi des onboardings</h2><p>Historique de tous les envois de documents</p></div>
         <div class="filters">
           <select id="logMagasin" onchange="loadLogs()"><option value="">Tous les magasins</option></select>
           <select id="logDept" onchange="loadLogs()"><option value="">Tous les départements</option></select>
           <select id="logStatut" onchange="loadLogs()"><option value="">Tous les statuts</option><option value="envoyé">Envoyé</option><option value="complété">Complété</option><option value="erreur">Erreur</option></select>
           <button class="btn-sm btn-outline" id="btnExportLog" onclick="exportCSV('onboarding')">Exporter CSV</button>
         </div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Nom</th><th>Courriel</th><th>Magasin</th><th>Département</th><th>Documents</th><th>Date</th><th>Statut</th><th id="thLogActions">Actions</th></tr></thead>
-            <tbody id="logBody"></tbody>
-          </table>
-        </div>
+        <div class="table-wrap"><table><thead><tr><th>Nom</th><th>Courriel</th><th>Magasin</th><th>Département</th><th>Documents</th><th>Date</th><th>Statut</th><th id="thLogActions">Actions</th></tr></thead><tbody id="logBody"></tbody></table></div>
       </div>
 
-      <!-- ═══ USERS (ADMIN ONLY) ═══ -->
+      <!-- USERS -->
       <div class="page" id="page-users">
-        <div class="page-head">
-          <h2>Gestion des gestionnaires</h2>
-          <p>Créer et gérer les comptes admin et cadre</p>
-        </div>
-        <div class="filters">
-          <button class="btn-sm btn-primary" onclick="openUserModal()">+ Nouveau compte</button>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Nom</th><th>Username</th><th>Rôle</th><th>Magasin</th><th>Statut</th><th>Actions</th></tr></thead>
-            <tbody id="usersBody"></tbody>
-          </table>
-        </div>
+        <div class="page-head"><h2>Gestion des gestionnaires</h2><p>Créer et gérer les comptes admin et cadre</p></div>
+        <div class="filters"><button class="btn-sm btn-primary" onclick="openUserModal()">+ Nouveau compte</button></div>
+        <div class="table-wrap"><table><thead><tr><th>Nom</th><th>Username</th><th>Rôle</th><th>Magasin</th><th>Statut</th><th>Actions</th></tr></thead><tbody id="usersBody"></tbody></table></div>
       </div>
-
     </div>
   </div>
 </div>
 
-<!-- ═══════════════ MODAL EMPLOYÉ ═══════════════ -->
-<div class="modal-overlay" id="empModal">
-  <div class="modal">
-    <h3 id="empModalTitle">Ajouter un employé</h3>
-    <p class="sub">Remplis les informations de l'employé</p>
-    <div class="alert" id="empModalAlert"></div>
-    <input type="hidden" id="empEditId">
-    <div class="row2">
-      <div class="field"><label>Prénom</label><input type="text" id="empPrenom"></div>
-      <div class="field"><label>Nom</label><input type="text" id="empNom"></div>
-    </div>
-    <div class="field"><label>Courriel</label><input type="email" id="empCourriel"></div>
-    <div class="row2">
-      <div class="field"><label>Magasin</label><select id="empMagasinModal"></select></div>
-      <div class="field"><label>Département</label><select id="empDeptModal"></select></div>
-    </div>
-    <div class="row2">
-      <div class="field"><label>Date d'embauche</label><input type="date" id="empDate"></div>
-      <div class="field"><label>Statut</label>
-        <select id="empStatutModal"><option value="actif">Actif</option><option value="probation">Probation</option><option value="terminé">Terminé</option></select>
-      </div>
-    </div>
-    <div class="field"><label>Notes</label><input type="text" id="empNotes" placeholder="Optionnel"></div>
-    <div class="modal-foot">
-      <button class="btn-sm btn-outline" onclick="closeModal('empModal')">Annuler</button>
-      <button class="btn-sm btn-primary" onclick="saveEmployee()">Enregistrer</button>
-    </div>
+<!-- MODAL EMPLOYÉ -->
+<div class="modal-overlay" id="empModal"><div class="modal">
+  <h3 id="empModalTitle">Ajouter un employé</h3>
+  <p class="sub">Remplis les informations de l'employé</p>
+  <div class="alert" id="empModalAlert"></div>
+  <input type="hidden" id="empEditId">
+  <div class="row2"><div class="field"><label>Prénom</label><input type="text" id="empPrenom"></div><div class="field"><label>Nom</label><input type="text" id="empNom"></div></div>
+  <div class="row2"><div class="field"><label>Courriel</label><input type="email" id="empCourriel"></div><div class="field"><label>Téléphone</label><input type="tel" id="empTelephone" placeholder="514-555-1234"></div></div>
+  <div class="row2"><div class="field"><label>Magasin</label><select id="empMagasinModal"></select></div><div class="field"><label>Département</label><select id="empDeptModal"></select></div></div>
+  <div class="row2">
+    <div class="field"><label>Type d'emploi</label><select id="empTypeModal"><option value="syndiqué">Syndiqué</option><option value="contractuel">Contractuel</option></select></div>
+    <div class="field"><label>Date d'embauche</label><input type="date" id="empDate"></div>
   </div>
-</div>
+  <div class="row2"><div class="field"><label>Statut</label><select id="empStatutModal"><option value="actif">Actif</option><option value="probation">Probation</option><option value="terminé">Terminé</option></select></div><div class="field"><label>Notes</label><input type="text" id="empNotes" placeholder="Optionnel"></div></div>
+  <div class="modal-foot"><button class="btn-sm btn-outline" onclick="closeModal('empModal')">Annuler</button><button class="btn-sm btn-primary" onclick="saveEmployee()">Enregistrer</button></div>
+</div></div>
 
-<!-- ═══════════════ MODAL USER ═══════════════ -->
-<div class="modal-overlay" id="userModal">
-  <div class="modal">
-    <h3 id="userModalTitle">Nouveau compte</h3>
-    <p class="sub">Créer un accès gestionnaire</p>
-    <div class="alert" id="userModalAlert"></div>
-    <input type="hidden" id="userEditId">
-    <div class="field"><label>Nom complet</label><input type="text" id="userNom"></div>
-    <div class="field"><label>Nom d'utilisateur</label><input type="text" id="userUsername"></div>
-    <div class="field"><label>Mot de passe</label><input type="password" id="userPassword" placeholder="Min. 6 caractères"></div>
-    <div class="row2">
-      <div class="field"><label>Rôle</label>
-        <select id="userRole" onchange="toggleMagasinField()"><option value="cadre">Cadre</option><option value="admin">Admin</option></select>
-      </div>
-      <div class="field" id="userMagasinField"><label>Magasin assigné</label><select id="userMagasin"></select></div>
+<!-- MODAL USER -->
+<div class="modal-overlay" id="userModal"><div class="modal">
+  <h3 id="userModalTitle">Nouveau compte</h3>
+  <p class="sub">Créer un accès gestionnaire</p>
+  <div class="alert" id="userModalAlert"></div>
+  <input type="hidden" id="userEditId">
+  <div class="field"><label>Nom complet</label><input type="text" id="userNom"></div>
+  <div class="field"><label>Nom d'utilisateur</label><input type="text" id="userUsername"></div>
+  <div class="field"><label>Mot de passe</label><input type="password" id="userPassword" placeholder="Min. 6 caractères"></div>
+  <div class="row2"><div class="field"><label>Rôle</label><select id="userRole" onchange="toggleMagasinField()"><option value="cadre">Cadre</option><option value="admin">Admin</option></select></div><div class="field" id="userMagasinField"><label>Magasin assigné</label><select id="userMagasin"></select></div></div>
+  <div class="modal-foot"><button class="btn-sm btn-outline" onclick="closeModal('userModal')">Annuler</button><button class="btn-sm btn-primary" onclick="saveUser()">Enregistrer</button></div>
+</div></div>
+
+<!-- MODAL AJOUT DOCUMENT -->
+<div class="modal-overlay" id="docModal"><div class="modal">
+  <h3>Ajouter un document</h3>
+  <p class="sub" id="docModalSub">Au dossier de l'employé</p>
+  <div class="alert" id="docModalAlert"></div>
+  <input type="hidden" id="docEmpId">
+  <div class="row2">
+    <div class="field"><label>Type</label>
+      <select id="docType">
+        <option value="evaluation_90">Évaluation 90 jours</option>
+        <option value="evaluation_annuelle">Évaluation annuelle</option>
+        <option value="avis_disciplinaire">Avis disciplinaire</option>
+        <option value="congediement">Congédiement</option>
+        <option value="contrat">Contrat</option>
+      </select>
     </div>
-    <div class="modal-foot">
-      <button class="btn-sm btn-outline" onclick="closeModal('userModal')">Annuler</button>
-      <button class="btn-sm btn-primary" onclick="saveUser()">Enregistrer</button>
+    <div class="field"><label>Date</label><input type="date" id="docDate"></div>
+  </div>
+  <div class="field"><label>Auteur</label><input type="text" id="docAuteur" placeholder="Nom du gestionnaire"></div>
+  <div class="field"><label>Notes</label><input type="text" id="docNotes" placeholder="Optionnel"></div>
+  <div class="field"><label>Fichier PDF</label><div class="file-input-wrap"><input type="file" id="docFichier" accept=".pdf"></div></div>
+  <div class="modal-foot"><button class="btn-sm btn-outline" onclick="closeModal('docModal')">Annuler</button><button class="btn-sm btn-primary" onclick="saveDocument()">Enregistrer</button></div>
+</div></div>
+
+<!-- DRAWER DOSSIER EMPLOYÉ -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <div><h3 id="drawerName">—</h3><div style="font-size:12px;color:var(--muted);margin-top:4px" id="drawerRole">—</div></div>
+    <button class="close-btn" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="drawer-body">
+    <!-- Infos -->
+    <div class="drawer-section">
+      <h4>Informations personnelles</h4>
+      <div class="info-grid" id="drawerInfo"></div>
+    </div>
+    <!-- Documents -->
+    <div class="drawer-section">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <h4 style="margin:0;border:none;padding:0">Dossier</h4>
+        <button class="btn-sm btn-primary" id="btnAddDoc" onclick="openDocModal()" style="font-size:11px;padding:5px 12px">+ Ajouter</button>
+      </div>
+      <div class="doc-list" id="drawerDocs"></div>
     </div>
   </div>
 </div>
 
 <script>
-// ─── STATE ──────────────────────────────────────────────────────
+const DOC_TYPE_LABELS = {
+  evaluation_90: 'Évaluation 90 jours',
+  evaluation_annuelle: 'Évaluation annuelle',
+  avis_disciplinaire: 'Avis disciplinaire',
+  congediement: 'Congédiement',
+  contrat: 'Contrat',
+};
+
 let currentUser = null;
 let magasins = [];
 let departements = [];
+let currentDrawerEmpId = null;
 
-// ─── API HELPERS ────────────────────────────────────────────────
 async function api(path, opts = {}) {
   const res = await fetch('/api/admin' + path, {
     ...opts,
-    headers: { 'Content-Type': 'application/json', ...opts.headers },
-    body: opts.body ? JSON.stringify(opts.body) : undefined,
+    headers: opts.headers || (opts.body instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
+    body: opts.body instanceof FormData ? opts.body : (opts.body ? JSON.stringify(opts.body) : undefined),
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || 'Erreur');
   return data;
 }
 
-// ─── AUTH ───────────────────────────────────────────────────────
+// AUTH
 document.getElementById('loginForm').addEventListener('submit', async (e) => {
   e.preventDefault();
-  const al = document.getElementById('loginAlert');
-  al.style.display = 'none';
+  const al = document.getElementById('loginAlert'); al.style.display = 'none';
   try {
-    const data = await api('/login', {
-      method: 'POST',
-      body: { username: document.getElementById('loginUser').value, password: document.getElementById('loginPass').value },
-    });
-    currentUser = data.user;
-    enterApp();
-  } catch (err) {
-    al.textContent = err.message;
-    al.style.display = 'block';
-  }
+    const data = await api('/login', { method: 'POST', body: { username: document.getElementById('loginUser').value, password: document.getElementById('loginPass').value } });
+    currentUser = data.user; enterApp();
+  } catch (err) { al.textContent = err.message; al.style.display = 'block'; }
 });
 
-async function checkAuth() {
-  try {
-    const data = await api('/me');
-    currentUser = data.user;
-    enterApp();
-  } catch { /* pas connecté */ }
-}
+async function checkAuth() { try { const data = await api('/me'); currentUser = data.user; enterApp(); } catch {} }
 
-async function doLogout() {
-  await api('/logout', { method: 'POST' });
-  currentUser = null;
-  document.getElementById('shell').style.display = 'none';
-  document.getElementById('loginWrap').style.display = 'flex';
-}
+async function doLogout() { await api('/logout', { method: 'POST' }); currentUser = null; document.getElementById('shell').style.display = 'none'; document.getElementById('loginWrap').style.display = 'flex'; }
 
 function enterApp() {
   document.getElementById('loginWrap').style.display = 'none';
   document.getElementById('shell').style.display = 'block';
   document.getElementById('userName').textContent = currentUser.nom_complet;
   document.getElementById('roleBadge').textContent = currentUser.role;
-
-  // Cacher les éléments admin pour les cadres
   const isAdmin = currentUser.role === 'admin';
   document.getElementById('navUsers').style.display = isAdmin ? '' : 'none';
   document.getElementById('btnAddEmp').style.display = isAdmin ? '' : 'none';
@@ -389,65 +369,41 @@ function enterApp() {
   document.getElementById('btnExportLog').style.display = isAdmin ? '' : 'none';
   document.getElementById('thEmpActions').style.display = isAdmin ? '' : 'none';
   document.getElementById('thLogActions').style.display = isAdmin ? '' : 'none';
-
-  // Cacher le filtre magasin pour les cadres (ils voient juste le leur)
-  if (!isAdmin) {
-    document.querySelectorAll('#empMagasin, #logMagasin').forEach(s => s.style.display = 'none');
-  }
-
-  loadOptions();
-  showPage('dashboard');
+  document.getElementById('btnAddDoc').style.display = isAdmin ? '' : 'none';
+  if (!isAdmin) document.querySelectorAll('#empMagasin, #logMagasin').forEach(s => s.style.display = 'none');
+  loadOptions(); showPage('dashboard');
 }
 
-// ─── NAVIGATION ─────────────────────────────────────────────────
+// NAV
 function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
   document.querySelector(`[data-page="${name}"]`)?.classList.add('active');
-
+  closeDrawer();
   if (name === 'dashboard') loadDashboard();
   else if (name === 'employees') loadEmployees();
   else if (name === 'onboarding') loadLogs();
   else if (name === 'users') loadUsers();
 }
 
-// ─── OPTIONS (magasins, départements) ───────────────────────────
+// OPTIONS
 async function loadOptions() {
   magasins = await fetch('/api/magasins').then(r => r.json());
   departements = await fetch('/api/departements').then(r => r.json());
-
-  const selectors = ['empMagasin', 'logMagasin', 'empMagasinModal', 'userMagasin'];
-  selectors.forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const firstOpt = el.options[0];
-    el.innerHTML = '';
-    if (firstOpt && firstOpt.value === '') el.appendChild(firstOpt);
-    magasins.forEach(m => {
-      const o = document.createElement('option');
-      o.value = m.value;
-      o.textContent = m.label;
-      el.appendChild(o);
-    });
+  ['empMagasin','logMagasin','empMagasinModal','userMagasin'].forEach(id => {
+    const el = document.getElementById(id); if (!el) return;
+    const fo = el.options[0]; el.innerHTML = ''; if (fo && fo.value === '') el.appendChild(fo);
+    magasins.forEach(m => { const o = document.createElement('option'); o.value = m.value; o.textContent = m.label; el.appendChild(o); });
   });
-
-  ['empDept', 'logDept', 'empDeptModal'].forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const firstOpt = el.options[0];
-    el.innerHTML = '';
-    if (firstOpt && firstOpt.value === '') el.appendChild(firstOpt);
-    departements.forEach(d => {
-      const o = document.createElement('option');
-      o.value = d;
-      o.textContent = d;
-      el.appendChild(o);
-    });
+  ['empDept','logDept','empDeptModal'].forEach(id => {
+    const el = document.getElementById(id); if (!el) return;
+    const fo = el.options[0]; el.innerHTML = ''; if (fo && fo.value === '') el.appendChild(fo);
+    departements.forEach(d => { const o = document.createElement('option'); o.value = d; o.textContent = d; el.appendChild(o); });
   });
 }
 
-// ─── DASHBOARD ──────────────────────────────────────────────────
+// DASHBOARD
 async function loadDashboard() {
   try {
     const stats = await api('/dashboard');
@@ -455,67 +411,53 @@ async function loadDashboard() {
       <div class="stat blue"><div class="label">Total employés</div><div class="value">${stats.totalEmployes}</div></div>
       <div class="stat amber"><div class="label">En probation</div><div class="value">${stats.enProbation}</div></div>
       <div class="stat green"><div class="label">Onboardings complétés</div><div class="value">${stats.onboardingsCompletes}</div><div class="sub">sur ${stats.totalOnboardings} envoyés</div></div>
-      <div class="stat red"><div class="label">30 derniers jours</div><div class="value">${stats.recent}</div><div class="sub">nouveaux onboardings</div></div>
-    `;
-
+      <div class="stat red"><div class="label">30 derniers jours</div><div class="value">${stats.recent}</div><div class="sub">nouveaux onboardings</div></div>`;
     const logs = await api('/onboarding-logs');
     const recent = logs.slice(0, 10);
     document.getElementById('recentLogs').innerHTML = recent.length
-      ? recent.map(l => `<tr>
-          <td><strong>${l.prenom} ${l.nom}</strong></td>
-          <td>${magLabel(l.magasin)}</td>
-          <td>${l.departement}</td>
-          <td>${formatDate(l.created_at)}</td>
-          <td><span class="badge-status badge-${l.statut}">${l.statut}</span></td>
-        </tr>`).join('')
+      ? recent.map(l => `<tr><td><strong>${l.prenom} ${l.nom}</strong></td><td>${magLabel(l.magasin)}</td><td>${l.departement}</td><td>${formatDate(l.created_at)}</td><td><span class="badge-status badge-${l.statut}">${l.statut}</span></td></tr>`).join('')
       : '<tr><td colspan="5" class="empty-state">Aucun onboarding enregistré</td></tr>';
-  } catch (err) {
-    console.error(err);
-  }
+  } catch (err) { console.error(err); }
 }
 
-// ─── EMPLOYEES ──────────────────────────────────────────────────
+// EMPLOYEES
 async function loadEmployees() {
   const params = new URLSearchParams();
-  const search = document.getElementById('empSearch').value;
-  const mag = document.getElementById('empMagasin').value;
-  const dept = document.getElementById('empDept').value;
-  const statut = document.getElementById('empStatut').value;
-  if (search) params.set('search', search);
-  if (mag) params.set('magasin', mag);
-  if (dept) params.set('departement', dept);
-  if (statut) params.set('statut', statut);
-
+  const s = document.getElementById('empSearch').value; if (s) params.set('search', s);
+  const m = document.getElementById('empMagasin').value; if (m) params.set('magasin', m);
+  const d = document.getElementById('empDept').value; if (d) params.set('departement', d);
+  const st = document.getElementById('empStatut').value; if (st) params.set('statut', st);
   try {
     const emps = await api('/employees?' + params);
     const isAdmin = currentUser.role === 'admin';
     document.getElementById('empBody').innerHTML = emps.length
-      ? emps.map(e => `<tr>
+      ? emps.map(e => `<tr class="clickable" onclick="openDrawer(${e.id})">
           <td><strong>${e.prenom} ${e.nom}</strong></td>
           <td>${e.courriel}</td>
           <td>${magLabel(e.magasin)}</td>
           <td>${e.departement}</td>
+          <td><span class="badge-status badge-${e.type_emploi||'syndiqué'}">${e.type_emploi||'syndiqué'}</span></td>
           <td>${e.date_embauche || '—'}</td>
           <td><span class="badge-status badge-${e.statut}">${e.statut}</span></td>
-          ${isAdmin ? `<td class="actions">
+          ${isAdmin ? `<td class="actions" onclick="event.stopPropagation()">
             <button onclick="editEmployee(${e.id})">Modifier</button>
             <button onclick="deleteEmployee(${e.id},'${e.prenom} ${e.nom}')">Supprimer</button>
           </td>` : ''}
         </tr>`).join('')
-      : `<tr><td colspan="${isAdmin ? 7 : 6}" class="empty-state">Aucun employé trouvé</td></tr>`;
-  } catch (err) {
-    console.error(err);
-  }
+      : `<tr><td colspan="${isAdmin ? 8 : 7}" class="empty-state">Aucun employé trouvé</td></tr>`;
+  } catch (err) { console.error(err); }
 }
 
 function openEmployeeModal(emp = null) {
-  document.getElementById('empModalTitle').textContent = emp ? 'Modifier l\'employé' : 'Ajouter un employé';
+  document.getElementById('empModalTitle').textContent = emp ? "Modifier l'employé" : 'Ajouter un employé';
   document.getElementById('empEditId').value = emp ? emp.id : '';
   document.getElementById('empPrenom').value = emp ? emp.prenom : '';
   document.getElementById('empNom').value = emp ? emp.nom : '';
   document.getElementById('empCourriel').value = emp ? emp.courriel : '';
+  document.getElementById('empTelephone').value = emp ? emp.telephone || '' : '';
   document.getElementById('empMagasinModal').value = emp ? emp.magasin : '';
   document.getElementById('empDeptModal').value = emp ? emp.departement : '';
+  document.getElementById('empTypeModal').value = emp ? emp.type_emploi || 'syndiqué' : 'syndiqué';
   document.getElementById('empDate').value = emp ? emp.date_embauche || '' : '';
   document.getElementById('empStatutModal').value = emp ? emp.statut : 'actif';
   document.getElementById('empNotes').value = emp ? emp.notes || '' : '';
@@ -523,243 +465,155 @@ function openEmployeeModal(emp = null) {
   document.getElementById('empModal').classList.add('show');
 }
 
-async function editEmployee(id) {
-  try {
-    const emp = await api('/employees/' + id);
-    openEmployeeModal(emp);
-  } catch (err) {
-    alert(err.message);
-  }
-}
+async function editEmployee(id) { try { openEmployeeModal(await api('/employees/' + id)); } catch (err) { alert(err.message); } }
 
 async function saveEmployee() {
-  const al = document.getElementById('empModalAlert');
-  const id = document.getElementById('empEditId').value;
-  const body = {
-    prenom: document.getElementById('empPrenom').value.trim(),
-    nom: document.getElementById('empNom').value.trim(),
-    courriel: document.getElementById('empCourriel').value.trim(),
-    magasin: document.getElementById('empMagasinModal').value,
-    departement: document.getElementById('empDeptModal').value,
-    date_embauche: document.getElementById('empDate').value,
-    statut: document.getElementById('empStatutModal').value,
-    notes: document.getElementById('empNotes').value.trim(),
-  };
-
-  if (!body.prenom || !body.nom || !body.courriel || !body.magasin || !body.departement) {
-    al.textContent = 'Tous les champs obligatoires doivent être remplis.';
-    al.style.display = 'block';
-    return;
-  }
-
+  const al = document.getElementById('empModalAlert'), id = document.getElementById('empEditId').value;
+  const body = { prenom: document.getElementById('empPrenom').value.trim(), nom: document.getElementById('empNom').value.trim(),
+    courriel: document.getElementById('empCourriel').value.trim(), telephone: document.getElementById('empTelephone').value.trim(),
+    magasin: document.getElementById('empMagasinModal').value, departement: document.getElementById('empDeptModal').value,
+    type_emploi: document.getElementById('empTypeModal').value, date_embauche: document.getElementById('empDate').value,
+    statut: document.getElementById('empStatutModal').value, notes: document.getElementById('empNotes').value.trim() };
+  if (!body.prenom || !body.nom || !body.courriel || !body.magasin || !body.departement) { al.textContent = 'Champs obligatoires manquants.'; al.style.display = 'block'; return; }
   try {
-    if (id) {
-      await api('/employees/' + id, { method: 'PUT', body });
-    } else {
-      await api('/employees', { method: 'POST', body });
-    }
-    closeModal('empModal');
-    loadEmployees();
-  } catch (err) {
-    al.textContent = err.message;
-    al.style.display = 'block';
-  }
+    if (id) await api('/employees/' + id, { method: 'PUT', body }); else await api('/employees', { method: 'POST', body });
+    closeModal('empModal'); loadEmployees();
+    if (currentDrawerEmpId && id == currentDrawerEmpId) openDrawer(currentDrawerEmpId);
+  } catch (err) { al.textContent = err.message; al.style.display = 'block'; }
 }
 
 async function deleteEmployee(id, name) {
   if (!confirm(`Supprimer ${name} ?`)) return;
-  try {
-    await api('/employees/' + id, { method: 'DELETE' });
-    loadEmployees();
-  } catch (err) {
-    alert(err.message);
-  }
+  try { await api('/employees/' + id, { method: 'DELETE' }); loadEmployees(); closeDrawer(); } catch (err) { alert(err.message); }
 }
 
-// ─── ONBOARDING LOGS ────────────────────────────────────────────
+// DRAWER
+async function openDrawer(empId) {
+  currentDrawerEmpId = empId;
+  try {
+    const emp = await api('/employees/' + empId);
+    const docs = await api('/employees/' + empId + '/documents');
+    document.getElementById('drawerName').textContent = emp.prenom + ' ' + emp.nom;
+    document.getElementById('drawerRole').textContent = emp.departement + ' — ' + magLabel(emp.magasin);
+    document.getElementById('drawerInfo').innerHTML = `
+      <div class="info-item"><span class="info-label">Courriel</span><span class="info-value">${emp.courriel}</span></div>
+      <div class="info-item"><span class="info-label">Téléphone</span><span class="info-value">${emp.telephone || '—'}</span></div>
+      <div class="info-item"><span class="info-label">Type</span><span class="info-value"><span class="badge-status badge-${emp.type_emploi||'syndiqué'}">${emp.type_emploi||'syndiqué'}</span></span></div>
+      <div class="info-item"><span class="info-label">Statut</span><span class="info-value"><span class="badge-status badge-${emp.statut}">${emp.statut}</span></span></div>
+      <div class="info-item"><span class="info-label">Date d'embauche</span><span class="info-value">${emp.date_embauche || '—'}</span></div>
+      <div class="info-item"><span class="info-label">Magasin</span><span class="info-value">${magLabel(emp.magasin)}</span></div>
+      ${emp.notes ? `<div class="info-item full"><span class="info-label">Notes</span><span class="info-value">${emp.notes}</span></div>` : ''}`;
+
+    const isAdmin = currentUser.role === 'admin';
+    document.getElementById('btnAddDoc').style.display = isAdmin ? '' : 'none';
+    document.getElementById('drawerDocs').innerHTML = docs.length
+      ? docs.map(d => `<div class="doc-item">
+          <div class="doc-item-left">
+            <div class="doc-item-type">${DOC_TYPE_LABELS[d.type] || d.type}</div>
+            <div class="doc-item-meta">${formatDate(d.date_document)}${d.auteur ? ' — ' + d.auteur : ''}${d.notes ? ' — ' + d.notes : ''}</div>
+          </div>
+          <div class="doc-item-actions">
+            ${d.fichier_nom ? `<button class="dl-btn" onclick="window.open('/api/admin/documents/${d.id}/download')">Télécharger</button>` : ''}
+            ${isAdmin ? `<button onclick="deleteDoc(${d.id})">Supprimer</button>` : ''}
+          </div>
+        </div>`).join('')
+      : '<div class="empty-state" style="padding:20px">Aucun document au dossier</div>';
+
+    document.getElementById('drawerOverlay').classList.add('show');
+    document.getElementById('drawer').classList.add('open');
+  } catch (err) { console.error(err); }
+}
+
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drawerOverlay').classList.remove('show');
+  currentDrawerEmpId = null;
+}
+
+// DOCUMENTS
+function openDocModal() {
+  document.getElementById('docEmpId').value = currentDrawerEmpId;
+  document.getElementById('docModalSub').textContent = 'Au dossier #' + currentDrawerEmpId;
+  document.getElementById('docType').value = 'evaluation_90';
+  document.getElementById('docDate').value = new Date().toISOString().slice(0, 10);
+  document.getElementById('docAuteur').value = currentUser.nom_complet;
+  document.getElementById('docNotes').value = '';
+  document.getElementById('docFichier').value = '';
+  document.getElementById('docModalAlert').style.display = 'none';
+  document.getElementById('docModal').classList.add('show');
+}
+
+async function saveDocument() {
+  const al = document.getElementById('docModalAlert');
+  const empId = document.getElementById('docEmpId').value;
+  const fd = new FormData();
+  fd.append('type', document.getElementById('docType').value);
+  fd.append('date_document', document.getElementById('docDate').value);
+  fd.append('auteur', document.getElementById('docAuteur').value.trim());
+  fd.append('notes', document.getElementById('docNotes').value.trim());
+  const file = document.getElementById('docFichier').files[0];
+  if (file) fd.append('fichier', file);
+  try {
+    await fetch('/api/admin/employees/' + empId + '/documents', { method: 'POST', body: fd });
+    closeModal('docModal');
+    openDrawer(parseInt(empId));
+  } catch (err) { al.textContent = err.message; al.style.display = 'block'; }
+}
+
+async function deleteDoc(docId) {
+  if (!confirm('Supprimer ce document ?')) return;
+  try { await api('/documents/' + docId, { method: 'DELETE' }); openDrawer(currentDrawerEmpId); } catch (err) { alert(err.message); }
+}
+
+// ONBOARDING LOGS
 async function loadLogs() {
   const params = new URLSearchParams();
-  const mag = document.getElementById('logMagasin').value;
-  const dept = document.getElementById('logDept').value;
-  const statut = document.getElementById('logStatut').value;
-  if (mag) params.set('magasin', mag);
-  if (dept) params.set('departement', dept);
-  if (statut) params.set('statut', statut);
-
+  const m = document.getElementById('logMagasin').value; if (m) params.set('magasin', m);
+  const d = document.getElementById('logDept').value; if (d) params.set('departement', d);
+  const st = document.getElementById('logStatut').value; if (st) params.set('statut', st);
   try {
     const logs = await api('/onboarding-logs?' + params);
     const isAdmin = currentUser.role === 'admin';
     document.getElementById('logBody').innerHTML = logs.length
-      ? logs.map(l => {
-          const docs = safeJSON(l.documents_envoyes);
-          return `<tr>
-            <td><strong>${l.prenom} ${l.nom}</strong></td>
-            <td>${l.courriel}</td>
-            <td>${magLabel(l.magasin)}</td>
-            <td>${l.departement}</td>
-            <td title="${docs.join(', ')}">${docs.length} doc${docs.length > 1 ? 's' : ''}</td>
-            <td>${formatDate(l.created_at)}</td>
-            <td><span class="badge-status badge-${l.statut}">${l.statut}</span></td>
-            ${isAdmin ? `<td class="actions">
-              ${l.statut === 'envoyé' ? `<button class="btn-sm btn-green" onclick="markComplete(${l.id})">Complété</button>` : ''}
-            </td>` : ''}
-          </tr>`;
-        }).join('')
-      : `<tr><td colspan="${isAdmin ? 8 : 7}" class="empty-state">Aucun onboarding enregistré</td></tr>`;
-  } catch (err) {
-    console.error(err);
-  }
+      ? logs.map(l => { const docs = safeJSON(l.documents_envoyes); return `<tr>
+          <td><strong>${l.prenom} ${l.nom}</strong></td><td>${l.courriel}</td><td>${magLabel(l.magasin)}</td><td>${l.departement}</td>
+          <td title="${docs.join(', ')}">${docs.length} doc${docs.length>1?'s':''}</td><td>${formatDate(l.created_at)}</td>
+          <td><span class="badge-status badge-${l.statut}">${l.statut}</span></td>
+          ${isAdmin ? `<td class="actions">${l.statut==='envoyé'?`<button class="btn-sm btn-green" onclick="markComplete(${l.id})">Complété</button>`:''}</td>` : ''}
+        </tr>`; }).join('')
+      : `<tr><td colspan="${isAdmin?8:7}" class="empty-state">Aucun onboarding enregistré</td></tr>`;
+  } catch (err) { console.error(err); }
 }
+async function markComplete(id) { try { await api('/onboarding-logs/'+id+'/status',{method:'PUT',body:{statut:'complété'}}); loadLogs(); loadDashboard(); } catch(err){alert(err.message);} }
 
-async function markComplete(id) {
-  try {
-    await api('/onboarding-logs/' + id + '/status', { method: 'PUT', body: { statut: 'complété' } });
-    loadLogs();
-    loadDashboard();
-  } catch (err) {
-    alert(err.message);
-  }
-}
-
-// ─── USERS MANAGEMENT (ADMIN) ───────────────────────────────────
+// USERS
 async function loadUsers() {
-  try {
-    const users = await api('/users');
+  try { const users = await api('/users');
     document.getElementById('usersBody').innerHTML = users.map(u => `<tr>
-      <td><strong>${u.nom_complet}</strong></td>
-      <td>${u.username}</td>
+      <td><strong>${u.nom_complet}</strong></td><td>${u.username}</td>
       <td><span class="badge-status badge-${u.role}">${u.role}</span></td>
-      <td>${u.magasin ? magLabel(u.magasin) : 'Tous'}</td>
-      <td><span class="badge-status ${u.actif ? 'badge-actif' : 'badge-inactif'}">${u.actif ? 'Actif' : 'Inactif'}</span></td>
-      <td class="actions">
-        <button onclick="editUser(${u.id})">Modifier</button>
-        <button onclick="toggleUser(${u.id}, ${u.actif})">${u.actif ? 'Désactiver' : 'Activer'}</button>
-      </td>
+      <td>${u.magasin?magLabel(u.magasin):'Tous'}</td>
+      <td><span class="badge-status ${u.actif?'badge-actif':'badge-inactif'}">${u.actif?'Actif':'Inactif'}</span></td>
+      <td class="actions"><button onclick="editUser(${u.id})">Modifier</button><button onclick="toggleUser(${u.id},${u.actif})">${u.actif?'Désactiver':'Activer'}</button></td>
     </tr>`).join('');
-  } catch (err) {
-    console.error(err);
-  }
+  } catch(err){console.error(err);}
 }
+function openUserModal(user=null){document.getElementById('userModalTitle').textContent=user?'Modifier le compte':'Nouveau compte';document.getElementById('userEditId').value=user?user.id:'';document.getElementById('userNom').value=user?user.nom_complet:'';document.getElementById('userUsername').value=user?user.username:'';document.getElementById('userUsername').disabled=!!user;document.getElementById('userPassword').value='';document.getElementById('userPassword').placeholder=user?'Laisser vide pour garder':'Min. 6 caractères';document.getElementById('userRole').value=user?user.role:'cadre';document.getElementById('userMagasin').value=user?user.magasin||'':'';document.getElementById('userModalAlert').style.display='none';toggleMagasinField();document.getElementById('userModal').classList.add('show');}
+async function editUser(id){try{const users=await api('/users');const u=users.find(u=>u.id===id);if(u)openUserModal(u);}catch(err){alert(err.message);}}
+function toggleMagasinField(){document.getElementById('userMagasinField').style.display=document.getElementById('userRole').value==='cadre'?'':'none';}
+async function saveUser(){const al=document.getElementById('userModalAlert'),id=document.getElementById('userEditId').value;const body={nom_complet:document.getElementById('userNom').value.trim(),username:document.getElementById('userUsername').value.trim(),password:document.getElementById('userPassword').value,role:document.getElementById('userRole').value,magasin:document.getElementById('userMagasin').value};if(!body.nom_complet||!body.username){al.textContent='Nom et username requis.';al.style.display='block';return;}if(!id&&(!body.password||body.password.length<6)){al.textContent='Min. 6 caractères.';al.style.display='block';return;}if(body.role==='cadre'&&!body.magasin){al.textContent='Magasin requis pour un cadre.';al.style.display='block';return;}try{if(id)await api('/users/'+id,{method:'PUT',body});else await api('/users',{method:'POST',body});closeModal('userModal');loadUsers();}catch(err){al.textContent=err.message;al.style.display='block';}}
+async function toggleUser(id,actif){if(!confirm(`Voulez-vous ${actif?'désactiver':'activer'} ce compte ?`))return;try{await api('/users/'+id+'/toggle',{method:'PUT'});loadUsers();}catch(err){alert(err.message);}}
 
-function openUserModal(user = null) {
-  document.getElementById('userModalTitle').textContent = user ? 'Modifier le compte' : 'Nouveau compte';
-  document.getElementById('userEditId').value = user ? user.id : '';
-  document.getElementById('userNom').value = user ? user.nom_complet : '';
-  document.getElementById('userUsername').value = user ? user.username : '';
-  document.getElementById('userUsername').disabled = !!user;
-  document.getElementById('userPassword').value = '';
-  document.getElementById('userPassword').placeholder = user ? 'Laisser vide pour garder' : 'Min. 6 caractères';
-  document.getElementById('userRole').value = user ? user.role : 'cadre';
-  document.getElementById('userMagasin').value = user ? user.magasin || '' : '';
-  document.getElementById('userModalAlert').style.display = 'none';
-  toggleMagasinField();
-  document.getElementById('userModal').classList.add('show');
-}
+// EXPORT
+function exportCSV(type){const m=type==='employees'?document.getElementById('empMagasin').value:document.getElementById('logMagasin').value;window.open(`/api/admin/export/${type}${m?'?magasin='+m:''}`);}
 
-async function editUser(id) {
-  try {
-    const users = await api('/users');
-    const user = users.find(u => u.id === id);
-    if (user) openUserModal(user);
-  } catch (err) {
-    alert(err.message);
-  }
-}
+// HELPERS
+function magLabel(val){const m=magasins.find(m=>m.value===val);return m?m.label:val;}
+function formatDate(d){if(!d)return '—';return new Date(d).toLocaleDateString('fr-CA',{year:'numeric',month:'short',day:'numeric'});}
+function safeJSON(s){try{return JSON.parse(s)||[];}catch{return[];}}
+function closeModal(id){document.getElementById(id).classList.remove('show');}
+document.querySelectorAll('.modal-overlay').forEach(el=>{el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('show');});});
 
-function toggleMagasinField() {
-  const role = document.getElementById('userRole').value;
-  document.getElementById('userMagasinField').style.display = role === 'cadre' ? '' : 'none';
-}
-
-async function saveUser() {
-  const al = document.getElementById('userModalAlert');
-  const id = document.getElementById('userEditId').value;
-  const body = {
-    nom_complet: document.getElementById('userNom').value.trim(),
-    username: document.getElementById('userUsername').value.trim(),
-    password: document.getElementById('userPassword').value,
-    role: document.getElementById('userRole').value,
-    magasin: document.getElementById('userMagasin').value,
-  };
-
-  if (!body.nom_complet || !body.username) {
-    al.textContent = 'Nom et username requis.';
-    al.style.display = 'block';
-    return;
-  }
-  if (!id && (!body.password || body.password.length < 6)) {
-    al.textContent = 'Le mot de passe doit contenir au moins 6 caractères.';
-    al.style.display = 'block';
-    return;
-  }
-  if (body.role === 'cadre' && !body.magasin) {
-    al.textContent = 'Un cadre doit être assigné à un magasin.';
-    al.style.display = 'block';
-    return;
-  }
-
-  try {
-    if (id) {
-      await api('/users/' + id, { method: 'PUT', body });
-    } else {
-      await api('/users', { method: 'POST', body });
-    }
-    closeModal('userModal');
-    loadUsers();
-  } catch (err) {
-    al.textContent = err.message;
-    al.style.display = 'block';
-  }
-}
-
-async function toggleUser(id, actif) {
-  const action = actif ? 'désactiver' : 'activer';
-  if (!confirm(`Voulez-vous ${action} ce compte ?`)) return;
-  try {
-    await api('/users/' + id + '/toggle', { method: 'PUT' });
-    loadUsers();
-  } catch (err) {
-    alert(err.message);
-  }
-}
-
-// ─── EXPORT CSV ─────────────────────────────────────────────────
-function exportCSV(type) {
-  const mag = type === 'employees'
-    ? document.getElementById('empMagasin').value
-    : document.getElementById('logMagasin').value;
-  const url = `/api/admin/export/${type}${mag ? '?magasin=' + mag : ''}`;
-  window.open(url, '_blank');
-}
-
-// ─── HELPERS ────────────────────────────────────────────────────
-function magLabel(val) {
-  const m = magasins.find(m => m.value === val);
-  return m ? m.label : val;
-}
-
-function formatDate(d) {
-  if (!d) return '—';
-  const dt = new Date(d);
-  return dt.toLocaleDateString('fr-CA', { year: 'numeric', month: 'short', day: 'numeric' });
-}
-
-function safeJSON(s) {
-  try { return JSON.parse(s) || []; } catch { return []; }
-}
-
-function closeModal(id) {
-  document.getElementById(id).classList.remove('show');
-}
-
-// Close modals on overlay click
-document.querySelectorAll('.modal-overlay').forEach(el => {
-  el.addEventListener('click', (e) => {
-    if (e.target === el) el.classList.remove('show');
-  });
-});
-
-// ─── INIT ───────────────────────────────────────────────────────
 checkAuth();
 </script>
 </body>

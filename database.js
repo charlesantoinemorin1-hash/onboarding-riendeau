@@ -7,13 +7,11 @@ const DB_PATH = path.join(__dirname, 'data.db');
 
 let db = null;
 
-// Sauvegarde automatique sur disque après chaque écriture
 function saveDb() {
   const data = db.export();
   fs.writeFileSync(DB_PATH, Buffer.from(data));
 }
 
-// ─── Init async (doit être appelé au démarrage) ─────────────────
 async function initDatabase() {
   const SQL = await initSqlJs();
 
@@ -46,8 +44,10 @@ async function initDatabase() {
       prenom TEXT NOT NULL,
       nom TEXT NOT NULL,
       courriel TEXT NOT NULL,
+      telephone TEXT,
       magasin TEXT NOT NULL,
       departement TEXT NOT NULL,
+      type_emploi TEXT DEFAULT 'syndiqué' CHECK(type_emploi IN ('contractuel', 'syndiqué')),
       date_embauche TEXT,
       statut TEXT DEFAULT 'actif' CHECK(statut IN ('actif', 'probation', 'terminé')),
       notes TEXT,
@@ -74,24 +74,43 @@ async function initDatabase() {
     )
   `);
 
+  // Nouvelle table : documents du dossier employé
+  db.run(`
+    CREATE TABLE IF NOT EXISTS employee_documents (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      employee_id INTEGER NOT NULL,
+      type TEXT NOT NULL CHECK(type IN ('evaluation_90', 'evaluation_annuelle', 'avis_disciplinaire', 'congediement', 'contrat')),
+      auteur TEXT,
+      date_document TEXT,
+      notes TEXT,
+      fichier_nom TEXT,
+      fichier_path TEXT,
+      created_at TEXT DEFAULT (datetime('now','localtime')),
+      FOREIGN KEY (employee_id) REFERENCES employees(id) ON DELETE CASCADE
+    )
+  `);
+
+  // Migration: ajouter les colonnes si elles n'existent pas
+  try { db.run('ALTER TABLE employees ADD COLUMN telephone TEXT'); } catch {}
+  try { db.run('ALTER TABLE employees ADD COLUMN type_emploi TEXT DEFAULT "syndiqué"'); } catch {}
+
   try { db.run('CREATE INDEX IF NOT EXISTS idx_employees_magasin ON employees(magasin)'); } catch {}
   try { db.run('CREATE INDEX IF NOT EXISTS idx_employees_departement ON employees(departement)'); } catch {}
   try { db.run('CREATE INDEX IF NOT EXISTS idx_onboarding_magasin ON onboarding_logs(magasin)'); } catch {}
   try { db.run('CREATE INDEX IF NOT EXISTS idx_admin_users_role ON admin_users(role)'); } catch {}
+  try { db.run('CREATE INDEX IF NOT EXISTS idx_emp_docs_employee ON employee_documents(employee_id)'); } catch {}
 
   saveDb();
   console.log('[DB] SQLite initialisé (sql.js) -', DB_PATH);
   return db;
 }
 
-// ─── Helpers : convertir les résultats sql.js en objets ─────────
+// ─── Helpers sql.js ─────────────────────────────────────────────
 function queryAll(sql, params = []) {
   const stmt = db.prepare(sql);
   stmt.bind(params);
   const rows = [];
-  while (stmt.step()) {
-    rows.push(stmt.getAsObject());
-  }
+  while (stmt.step()) rows.push(stmt.getAsObject());
   stmt.free();
   return rows;
 }
@@ -108,8 +127,9 @@ function runSql(sql, params = []) {
   return { lastInsertRowid: lastId ? lastId.id : null };
 }
 
-// ─── Admin Users ────────────────────────────────────────────────
+// ─── Statements ─────────────────────────────────────────────────
 const stmts = {
+  // Admin users
   insertUser(username, passwordHash, nomComplet, role, magasin) {
     return runSql('INSERT INTO admin_users (username, password_hash, nom_complet, role, magasin) VALUES (?, ?, ?, ?, ?)',
       [username, passwordHash, nomComplet, role, magasin]);
@@ -124,8 +144,7 @@ const stmts = {
     return queryAll('SELECT id, username, nom_complet, role, magasin, actif, created_at FROM admin_users ORDER BY role, nom_complet');
   },
   updateUser(nomComplet, role, magasin, id) {
-    runSql("UPDATE admin_users SET nom_complet = ?, role = ?, magasin = ?, updated_at = datetime('now','localtime') WHERE id = ?",
-      [nomComplet, role, magasin, id]);
+    runSql("UPDATE admin_users SET nom_complet = ?, role = ?, magasin = ?, updated_at = datetime('now','localtime') WHERE id = ?", [nomComplet, role, magasin, id]);
   },
   updatePassword(passwordHash, id) {
     runSql("UPDATE admin_users SET password_hash = ?, updated_at = datetime('now','localtime') WHERE id = ?", [passwordHash, id]);
@@ -142,11 +161,12 @@ const stmts = {
   getEmployeeById(id) {
     return queryOne('SELECT * FROM employees WHERE id = ?', [id]);
   },
-  updateEmployee(prenom, nom, courriel, magasin, departement, dateEmbauche, statut, notes, id) {
-    runSql("UPDATE employees SET prenom = ?, nom = ?, courriel = ?, magasin = ?, departement = ?, date_embauche = ?, statut = ?, notes = ?, updated_at = datetime('now','localtime') WHERE id = ?",
-      [prenom, nom, courriel, magasin, departement, dateEmbauche, statut, notes, id]);
+  updateEmployee(prenom, nom, courriel, telephone, magasin, departement, typeEmploi, dateEmbauche, statut, notes, id) {
+    runSql("UPDATE employees SET prenom=?, nom=?, courriel=?, telephone=?, magasin=?, departement=?, type_emploi=?, date_embauche=?, statut=?, notes=?, updated_at=datetime('now','localtime') WHERE id=?",
+      [prenom, nom, courriel, telephone, magasin, departement, typeEmploi, dateEmbauche, statut, notes, id]);
   },
   deleteEmployee(id) {
+    runSql('DELETE FROM employee_documents WHERE employee_id = ?', [id]);
     runSql('DELETE FROM employees WHERE id = ?', [id]);
   },
 
@@ -158,9 +178,24 @@ const stmts = {
   updateLogStatus(statut, id) {
     runSql('UPDATE onboarding_logs SET statut = ? WHERE id = ?', [statut, id]);
   },
+
+  // Employee documents
+  insertDocument(employeeId, type, auteur, dateDocument, notes, fichierNom, fichierPath) {
+    return runSql('INSERT INTO employee_documents (employee_id, type, auteur, date_document, notes, fichier_nom, fichier_path) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [employeeId, type, auteur, dateDocument, notes, fichierNom, fichierPath]);
+  },
+  getDocumentsByEmployee(employeeId) {
+    return queryAll('SELECT * FROM employee_documents WHERE employee_id = ? ORDER BY created_at DESC', [employeeId]);
+  },
+  getDocumentById(id) {
+    return queryOne('SELECT * FROM employee_documents WHERE id = ?', [id]);
+  },
+  deleteDocument(id) {
+    runSql('DELETE FROM employee_documents WHERE id = ?', [id]);
+  },
 };
 
-// ─── Fonctions de requête avec filtres ──────────────────────────
+// ─── Fonctions filtrées ─────────────────────────────────────────
 
 function getEmployees(filters = {}) {
   let sql = 'SELECT * FROM employees WHERE 1=1';
@@ -190,14 +225,12 @@ function getOnboardingLogs(filters = {}) {
 function getDashboardStats(magasin = null) {
   const where = magasin ? 'WHERE magasin = ?' : '';
   const params = magasin ? [magasin] : [];
-
   const totalEmployes = queryOne(`SELECT COUNT(*) as n FROM employees ${where}`, params).n;
   const enProbation = queryOne(`SELECT COUNT(*) as n FROM employees ${where ? where + " AND" : "WHERE"} statut = 'probation'`, params).n;
   const totalOnboardings = queryOne(`SELECT COUNT(*) as n FROM onboarding_logs ${where}`, params).n;
   const onboardingsCompletes = queryOne(`SELECT COUNT(*) as n FROM onboarding_logs ${where ? where + " AND" : "WHERE"} statut = 'complété'`, params).n;
   const recent = queryOne(`SELECT COUNT(*) as n FROM onboarding_logs ${where ? where + " AND" : "WHERE"} created_at >= datetime('now','-30 days')`, params).n;
   const parMagasin = queryAll('SELECT magasin, COUNT(*) as n FROM onboarding_logs GROUP BY magasin ORDER BY n DESC');
-
   return { totalEmployes, enProbation, totalOnboardings, onboardingsCompletes, recent, parMagasin };
 }
 
@@ -205,11 +238,4 @@ function findEmployeeByEmail(courriel, magasin) {
   return queryOne('SELECT id FROM employees WHERE courriel = ? AND magasin = ?', [courriel, magasin]);
 }
 
-module.exports = {
-  initDatabase,
-  stmts,
-  getEmployees,
-  getOnboardingLogs,
-  getDashboardStats,
-  findEmployeeByEmail,
-};
+module.exports = { initDatabase, stmts, getEmployees, getOnboardingLogs, getDashboardStats, findEmployeeByEmail };
