@@ -23,6 +23,13 @@ app.get('/api/departements', (req, res) => res.json(DEPARTEMENTS));
 const adminRoutes = require('./routes/admin');
 app.use('/api/admin', adminRoutes);
 
+const documentRoutes = require('./routes/documents');
+app.use('/api/documents', documentRoutes);
+
+app.get('/admin/documents', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'admin-documents.html'));
+});
+
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'admin.html'));
 });

@@ -67,7 +67,7 @@ function getDocuments(magasin, departement) {
   if (MAGASINS_SYNDICAT.includes(magasin.toLowerCase())) {
     docs.push(DOC_SYNDICAT);
   }
-  
+
   // Convention collective selon magasin
   const convention = CONVENTIONS_COLLECTIVES[magasin.toLowerCase()];
   if (convention) docs.push(convention);
@@ -78,12 +78,32 @@ function getDocuments(magasin, departement) {
   if (fiche) {
     docs.push(fiche);
   } else {
-    // Chercher une correspondance partielle
     const match = Object.entries(FICHES_TACHES).find(([k]) => key.includes(k) || k.includes(key));
     if (match) docs.push(match[1]);
   }
 
+  // ── NOUVEAU : documents dynamiques depuis docs_config.json ──────────────
+  try {
+    const fs   = require('fs');
+    const path = require('path');
+    const configPath = path.join(__dirname, 'docs_config.json');
+    if (fs.existsSync(configPath)) {
+      const extra = JSON.parse(fs.readFileSync(configPath, 'utf-8')).extra || [];
+      extra.forEach(e => {
+        const magasinMatch = e.magasin === 'tous' || e.magasin === magasin.toLowerCase();
+        const deptMatch    = e.departement === 'tous' || e.departement === departement.toLowerCase();
+        if (magasinMatch && deptMatch && !docs.includes(e.fichier)) {
+          docs.push(e.fichier);
+        }
+      });
+    }
+  } catch (err) {
+    console.warn('[config] Erreur lecture docs_config.json:', err.message);
+  }
+  // ────────────────────────────────────────────────────────────────────────
+
   return docs;
 }
+
 
 module.exports = { DOCS_DIR, DOCS_COMMUNS, DOC_SYNDICAT, CONVENTIONS_COLLECTIVES, FICHES_TACHES, MAGASINS, DEPARTEMENTS, getDocuments };

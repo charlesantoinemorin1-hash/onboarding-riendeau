@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documents — Admin Marchés Riendeau</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --red:#e31837;--red-dark:#b5121d;
+  --text:#111;--muted:#6b7280;--border:#e5e7eb;--bg:#f7f7f7;
+  --card:#fff;--success:#15803d;--danger:#dc2626;--warn:#b45309;
+  --sans:'IBM Plex Sans',sans-serif;--mono:'IBM Plex Mono',monospace;
+}
+html{font-family:var(--sans);background:var(--bg);color:var(--text);font-size:14px;}
+body{min-height:100vh;}
+
+/* ── NAV ── */
+nav{background:var(--red);color:white;height:52px;display:flex;align-items:center;padding:0 28px;gap:16px;position:sticky;top:0;z-index:100;}
+.nav-brand{font-size:14px;font-weight:700;letter-spacing:.3px;}
+.nav-links{display:flex;gap:2px;margin-left:24px;}
+.nav-link{padding:6px 14px;border-radius:6px;color:rgba(255,255,255,.8);font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;transition:all .15s;}
+.nav-link:hover,.nav-link.active{background:rgba(255,255,255,.18);color:white;}
+.nav-user{margin-left:auto;font-size:12px;color:rgba(255,255,255,.75);}
+
+/* ── PAGE ── */
+.page{max-width:1200px;margin:0 auto;padding:28px 28px;}
+.page-header{margin-bottom:24px;}
+.page-header h1{font-size:20px;font-weight:700;margin-bottom:4px;}
+.page-header p{font-size:13px;color:var(--muted);}
+
+/* ── GRID ── */
+.layout{display:grid;grid-template-columns:1fr 380px;gap:20px;align-items:start;}
+
+/* ── CARD ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;}
+.card-head{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.card-head h2{font-size:14px;font-weight:600;}
+.card-head p{font-size:12px;color:var(--muted);margin-top:2px;}
+.card-body{padding:20px;}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:2px;padding:12px 20px 0;border-bottom:1px solid var(--border);}
+.tab{padding:8px 16px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;margin-bottom:-1px;}
+.tab.active{color:var(--red);border-bottom-color:var(--red);}
+
+/* ── TABLE ── */
+.tbl{width:100%;border-collapse:collapse;}
+.tbl th{padding:9px 14px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);background:#fafafa;border-bottom:1px solid var(--border);text-align:left;white-space:nowrap;}
+.tbl td{padding:10px 14px;border-bottom:1px solid #f3f4f6;font-size:13px;vertical-align:middle;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:#fafafa;}
+.tbl .fname{font-family:var(--mono);font-size:12px;color:var(--text);}
+.tbl .fsize{font-family:var(--mono);font-size:11px;color:var(--muted);}
+.tbl .fdate{font-size:11px;color:var(--muted);}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600;white-space:nowrap;}
+.badge-commun  {background:#eff6ff;color:#1d4ed8;}
+.badge-taches  {background:#f0fdf4;color:#15803d;}
+.badge-syndicat{background:#fef3c7;color:#b45309;}
+.badge-convention{background:#fdf4ff;color:#7e22ce;}
+.badge-extra   {background:#fff1f2;color:#be123c;}
+.badge-tous    {background:#f3f4f6;color:#374151;}
+
+/* ── ACTIONS ── */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:6px;font-family:var(--sans);font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .15s;}
+.btn-primary{background:var(--red);color:white;}
+.btn-primary:hover{background:var(--red-dark);}
+.btn-outline{background:white;color:var(--text);border:1px solid var(--border);}
+.btn-outline:hover{border-color:var(--text);}
+.btn-danger{background:#fef2f2;color:var(--danger);border:1px solid #fca5a5;}
+.btn-danger:hover{background:#fee2e2;}
+.btn-sm{padding:4px 10px;font-size:11px;}
+
+/* ── FORM ── */
+.form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
+.form-group label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);}
+.form-group input,.form-group select{padding:9px 11px;border:1.5px solid var(--border);border-radius:7px;font-family:var(--sans);font-size:13px;color:var(--text);background:white;transition:border-color .15s;}
+.form-group input:focus,.form-group select:focus{outline:none;border-color:var(--red);}
+.form-group small{font-size:11px;color:var(--muted);}
+
+/* Drop zone */
+.dropzone{
+  border:2px dashed var(--border);border-radius:8px;padding:28px;text-align:center;
+  cursor:pointer;transition:all .2s;background:#fafafa;
+}
+.dropzone:hover,.dropzone.drag{border-color:var(--red);background:#fff5f5;}
+.dropzone input{display:none;}
+.dropzone-icon{font-size:28px;margin-bottom:8px;}
+.dropzone p{font-size:13px;color:var(--muted);line-height:1.5;}
+.dropzone .fname-preview{font-family:var(--mono);font-size:12px;color:var(--red);margin-top:6px;font-weight:500;}
+
+/* Upload progress */
+.progress{height:4px;background:#f3f4f6;border-radius:2px;overflow:hidden;margin-top:8px;display:none;}
+.progress-bar{height:100%;background:var(--red);border-radius:2px;transition:width .3s;}
+
+/* Alert */
+.alert{padding:10px 14px;border-radius:7px;font-size:13px;margin-bottom:14px;display:none;}
+.alert-ok {background:#f0fdf4;border:1px solid #86efac;color:var(--success);}
+.alert-err{background:#fef2f2;border:1px solid #fca5a5;color:var(--danger);}
+
+/* Assignation item */
+.assign-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid #f3f4f6;}
+.assign-item:last-child{border-bottom:none;}
+.assign-file{font-family:var(--mono);font-size:11px;color:var(--text);font-weight:500;flex:1;word-break:break-all;}
+.assign-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:3px;}
+
+/* Filtre */
+.filter-row{display:flex;gap:8px;padding:12px 20px;border-bottom:1px solid var(--border);flex-wrap:wrap;align-items:center;}
+.filter-row select,.filter-row input{padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-family:var(--sans);font-size:12px;background:white;}
+.filter-row select:focus,.filter-row input:focus{outline:none;border-color:var(--red);}
+.count{font-size:11px;color:var(--muted);margin-left:auto;}
+
+/* Empty */
+.empty{padding:32px;text-align:center;color:var(--muted);font-size:13px;}
+
+/* Modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:white;border-radius:12px;padding:24px;width:100%;max-width:480px;box-shadow:0 8px 32px rgba(0,0,0,.15);}
+.modal h3{font-size:15px;font-weight:700;margin-bottom:16px;}
+.modal-footer{display:flex;justify-content:flex-end;gap:8px;margin-top:18px;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">Marchés Riendeau — Admin</div>
+  <div class="nav-links">
+    <a class="nav-link" href="/admin">Tableau de bord</a>
+    <a class="nav-link" href="/admin/employes">Employés</a>
+    <a class="nav-link active" href="/admin/documents">Documents</a>
+  </div>
+  <div class="nav-user" id="navUser"></div>
+</nav>
+
+<div class="page">
+  <div class="page-header">
+    <h1>Gestion des documents</h1>
+    <p>Gérer les fichiers PDF envoyés lors de l'onboarding — par magasin et par poste.</p>
+  </div>
+
+  <div class="layout">
+
+    <!-- COLONNE GAUCHE — Liste fichiers + assignations -->
+    <div>
+
+      <!-- Onglets -->
+      <div class="card" style="border-radius:10px 10px 0 0;border-bottom:none;">
+        <div class="tabs">
+          <div class="tab active" onclick="switchTab('fichiers',this)">Fichiers (PDF)</div>
+          <div class="tab" onclick="switchTab('assignations',this)">Assignations par poste</div>
+        </div>
+      </div>
+
+      <!-- Tab fichiers -->
+      <div id="tab-fichiers" class="card" style="border-radius:0 0 10px 10px;">
+        <div class="filter-row">
+          <input type="search" id="searchFichier" placeholder="Rechercher un fichier…" oninput="filterFichiers()" style="flex:1;min-width:180px;">
+          <span class="count" id="countFichiers">— fichiers</span>
+        </div>
+        <div id="listeFichiers">
+          <div class="empty">Chargement…</div>
+        </div>
+      </div>
+
+      <!-- Tab assignations -->
+      <div id="tab-assignations" class="card" style="border-radius:0 0 10px 10px;display:none;">
+        <div class="filter-row">
+          <select id="filterMagasin" onchange="filterAssignations()">
+            <option value="">Tous les magasins</option>
+            <option value="tous">Tous (générique)</option>
+            <option value="beloeil">Beloeil</option>
+            <option value="st-hilaire">Mont-Saint-Hilaire</option>
+            <option value="ste-julie">Sainte-Julie</option>
+            <option value="st-hubert">Saint-Hubert</option>
+            <option value="st-hyacinthe">Saint-Hyacinthe</option>
+          </select>
+          <select id="filterDept" onchange="filterAssignations()">
+            <option value="">Tous les postes</option>
+            <option value="tous">Tous (générique)</option>
+          </select>
+          <span class="count" id="countAssignations">— assignations</span>
+        </div>
+        <div id="listeAssignations">
+          <div class="empty">Chargement…</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- COLONNE DROITE — Actions -->
+    <div style="display:flex;flex-direction:column;gap:16px;">
+
+      <!-- Upload -->
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <h2>Ajouter / Remplacer un fichier</h2>
+            <p>Glisse un PDF ou clique pour sélectionner</p>
+          </div>
+        </div>
+        <div class="card-body">
+          <div id="alertUpload" class="alert"></div>
+
+          <div class="form-group">
+            <label>Nom du fichier (optionnel)</label>
+            <input type="text" id="uploadNom" placeholder="Ex: Taches caissier.pdf">
+            <small>Laisse vide pour garder le nom original. Remplacera un fichier existant du même nom.</small>
+          </div>
+
+          <div class="dropzone" id="dropzone" onclick="document.getElementById('fileInput').click()"
+               ondragover="handleDrag(event,true)" ondragleave="handleDrag(event,false)" ondrop="handleDrop(event)">
+            <input type="file" id="fileInput" accept=".pdf" onchange="handleFile(this.files[0])">
+            <div class="dropzone-icon">📄</div>
+            <p>Glisse un PDF ici<br>ou clique pour parcourir</p>
+            <div class="fname-preview" id="fnamePreview" style="display:none"></div>
+          </div>
+
+          <div class="progress" id="uploadProgress">
+            <div class="progress-bar" id="uploadBar" style="width:0%"></div>
+          </div>
+
+          <button class="btn btn-primary" onclick="uploadFile()" style="width:100%;margin-top:14px;justify-content:center;" id="btnUpload" disabled>
+            ⬆ Uploader le fichier
+          </button>
+        </div>
+      </div>
+
+      <!-- Nouvelle assignation -->
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <h2>Assigner un document</h2>
+            <p>Lier un fichier à un magasin/poste</p>
+          </div>
+        </div>
+        <div class="card-body">
+          <div id="alertAssign" class="alert"></div>
+
+          <div class="form-group">
+            <label>Fichier</label>
+            <select id="assignFichier">
+              <option value="">— Sélectionner un fichier —</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Magasin</label>
+            <select id="assignMagasin">
+              <option value="tous">Tous les magasins</option>
+              <option value="beloeil">Beloeil</option>
+              <option value="st-hilaire">Mont-Saint-Hilaire</option>
+              <option value="ste-julie">Sainte-Julie</option>
+              <option value="st-hubert">Saint-Hubert</option>
+              <option value="st-hyacinthe">Saint-Hyacinthe</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Poste / Département</label>
+            <select id="assignDept">
+              <option value="tous">Tous les postes</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Description (optionnel)</label>
+            <input type="text" id="assignDesc" placeholder="Ex: Règlement intérieur cuisine">
+          </div>
+          <button class="btn btn-primary" onclick="addAssignation()" style="width:100%;justify-content:center;">
+            + Ajouter l'assignation
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal confirmation suppression -->
+<div class="modal-overlay" id="modalDelete">
+  <div class="modal">
+    <h3>Supprimer ce fichier ?</h3>
+    <p style="font-size:13px;color:var(--muted);line-height:1.6;" id="modalDeleteMsg"></p>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal()">Annuler</button>
+      <button class="btn btn-danger" id="btnConfirmDelete" onclick="confirmDelete()">Supprimer définitivement</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const MAGASINS_LABELS = {
+  'tous':'Tous','beloeil':'Beloeil','st-hilaire':'Mont-Saint-Hilaire',
+  'ste-julie':'Sainte-Julie','st-hubert':'Saint-Hubert','st-hyacinthe':'Saint-Hyacinthe'
+};
+const DEPARTEMENTS = [
+  'Caissier','Boulangerie','Charcuterie','Emballeur','Épicerie',
+  'Fruits et légumes','Fruits et légumes transformés','Mets cuisinés',
+  'Poissonnerie','Viande','Livreur','Préparateur de commandes'
+];
+const TYPE_LABELS = {
+  commun:'Tous',taches:'Tâches',syndicat:'Syndicat',
+  convention:'Convention',extra:'Additionnel'
+};
+const TYPE_BADGE = {
+  commun:'badge-commun',taches:'badge-taches',syndicat:'badge-syndicat',
+  convention:'badge-convention',extra:'badge-extra'
+};
+
+let allFichiers = [], allAssignations = [];
+let fileToUpload = null, fileToDelete = null;
+
+// ── Init ────────────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', async () => {
+  // Peupler selects
+  const selDept = document.getElementById('assignDept');
+  const filterDept = document.getElementById('filterDept');
+  DEPARTEMENTS.forEach(d => {
+    [selDept, filterDept].forEach(sel => {
+      const o = document.createElement('option');
+      o.value = d.toLowerCase(); o.textContent = d;
+      sel.appendChild(o);
+    });
+  });
+
+  await Promise.all([loadFichiers(), loadAssignations()]);
+  updateAssignSelect();
+});
+
+// ── Tabs ────────────────────────────────────────────────────────────────────
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-fichiers').style.display     = name==='fichiers'     ? '' : 'none';
+  document.getElementById('tab-assignations').style.display = name==='assignations' ? '' : 'none';
+}
+
+// ── Charger fichiers ─────────────────────────────────────────────────────────
+async function loadFichiers() {
+  const res  = await fetch('/api/documents');
+  const data = await res.json();
+  allFichiers = data.fichiers || [];
+  renderFichiers(allFichiers);
+  updateAssignSelect();
+}
+
+function renderFichiers(list) {
+  document.getElementById('countFichiers').textContent = `${list.length} fichier${list.length!==1?'s':''}`;
+  const el = document.getElementById('listeFichiers');
+  if (!list.length) { el.innerHTML = '<div class="empty">Aucun fichier PDF dans le dossier docs/</div>'; return; }
+
+  el.innerHTML = `<table class="tbl">
+    <thead><tr>
+      <th>Nom du fichier</th>
+      <th>Taille</th>
+      <th>Modifié</th>
+      <th></th>
+    </tr></thead>
+    <tbody>
+    ${list.map(f => `
+      <tr>
+        <td><span class="fname">${f.nom}</span></td>
+        <td><span class="fsize">${formatSize(f.taille)}</span></td>
+        <td><span class="fdate">${formatDate(f.modifie)}</span></td>
+        <td style="text-align:right">
+          <button class="btn btn-danger btn-sm" onclick="deleteFile('${escHtml(f.nom)}')">Supprimer</button>
+        </td>
+      </tr>`).join('')}
+    </tbody></table>`;
+}
+
+function filterFichiers() {
+  const q = document.getElementById('searchFichier').value.toLowerCase();
+  renderFichiers(allFichiers.filter(f => f.nom.toLowerCase().includes(q)));
+}
+
+// ── Charger assignations ─────────────────────────────────────────────────────
+async function loadAssignations() {
+  const res  = await fetch('/api/documents/assignations');
+  allAssignations = await res.json();
+  renderAssignations(allAssignations);
+}
+
+function renderAssignations(list) {
+  document.getElementById('countAssignations').textContent = `${list.length} assignation${list.length!==1?'s':''}`;
+  const el = document.getElementById('listeAssignations');
+  if (!list.length) { el.innerHTML = '<div class="empty">Aucune assignation</div>'; return; }
+
+  el.innerHTML = `<table class="tbl">
+    <thead><tr>
+      <th>Fichier</th>
+      <th>Magasin</th>
+      <th>Poste</th>
+      <th>Type</th>
+      <th></th>
+    </tr></thead>
+    <tbody>
+    ${list.map(a => `
+      <tr>
+        <td><span class="fname">${a.fichier}</span></td>
+        <td><span class="badge badge-tous">${MAGASINS_LABELS[a.magasin]||a.magasin}</span></td>
+        <td><span style="font-size:12px">${a.departement==='tous'?'Tous':capitalize(a.departement)}</span></td>
+        <td><span class="badge ${TYPE_BADGE[a.type]||'badge-tous'}">${TYPE_LABELS[a.type]||a.type}</span></td>
+        <td style="text-align:right">
+          ${a.type==='extra'
+            ? `<button class="btn btn-danger btn-sm" onclick="deleteAssignation(${a.id})">Retirer</button>`
+            : `<span style="font-size:11px;color:var(--muted)">Statique</span>`}
+        </td>
+      </tr>`).join('')}
+    </tbody></table>`;
+}
+
+function filterAssignations() {
+  const mag  = document.getElementById('filterMagasin').value;
+  const dept = document.getElementById('filterDept').value;
+  let list = allAssignations;
+  if (mag)  list = list.filter(a => !mag  || a.magasin===mag);
+  if (dept) list = list.filter(a => !dept || a.departement===dept);
+  renderAssignations(list);
+}
+
+// ── Upload ───────────────────────────────────────────────────────────────────
+function handleDrag(e, over) {
+  e.preventDefault();
+  document.getElementById('dropzone').classList.toggle('drag', over);
+}
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('dropzone').classList.remove('drag');
+  const f = e.dataTransfer.files[0];
+  if (f) handleFile(f);
+}
+function handleFile(f) {
+  if (!f || !f.name.endsWith('.pdf')) {
+    showAlert('alertUpload','err','Seuls les fichiers PDF sont acceptés.');
+    return;
+  }
+  fileToUpload = f;
+  document.getElementById('fnamePreview').textContent = f.name;
+  document.getElementById('fnamePreview').style.display = 'block';
+  document.getElementById('btnUpload').disabled = false;
+  if (!document.getElementById('uploadNom').value) {
+    document.getElementById('uploadNom').value = f.name;
+  }
+}
+
+async function uploadFile() {
+  if (!fileToUpload) return;
+  const nom  = document.getElementById('uploadNom').value.trim();
+  const form = new FormData();
+  form.append('fichier', fileToUpload);
+  if (nom) form.append('nom_fichier', nom);
+
+  document.getElementById('btnUpload').disabled = true;
+  document.getElementById('uploadProgress').style.display = 'block';
+  document.getElementById('uploadBar').style.width = '60%';
+
+  try {
+    const res  = await fetch('/api/documents/upload', { method:'POST', body:form });
+    const data = await res.json();
+    document.getElementById('uploadBar').style.width = '100%';
+    if (data.success) {
+      showAlert('alertUpload','ok',`✓ Fichier "${data.fichier}" uploadé avec succès.`);
+      fileToUpload = null;
+      document.getElementById('fnamePreview').style.display = 'none';
+      document.getElementById('uploadNom').value = '';
+      document.getElementById('btnUpload').disabled = true;
+      await loadFichiers();
+    } else {
+      showAlert('alertUpload','err', data.error || 'Erreur lors de l\'upload.');
+    }
+  } catch {
+    showAlert('alertUpload','err','Erreur réseau.');
+  }
+  setTimeout(() => { document.getElementById('uploadProgress').style.display='none'; document.getElementById('uploadBar').style.width='0%'; }, 800);
+}
+
+// ── Supprimer fichier ─────────────────────────────────────────────────────────
+function deleteFile(nom) {
+  fileToDelete = nom;
+  document.getElementById('modalDeleteMsg').innerHTML =
+    `Tu vas supprimer <strong>${nom}</strong> du serveur. Cette action est irréversible.`;
+  document.getElementById('modalDelete').classList.add('open');
+}
+function closeModal() {
+  document.getElementById('modalDelete').classList.remove('open');
+  fileToDelete = null;
+}
+async function confirmDelete() {
+  if (!fileToDelete) return;
+  const res = await fetch(`/api/documents/fichier/${encodeURIComponent(fileToDelete)}`, { method:'DELETE' });
+  const data = await res.json();
+  closeModal();
+  if (data.success) {
+    await loadFichiers();
+  } else {
+    alert(data.error || 'Erreur lors de la suppression.');
+  }
+}
+
+// ── Assignations ─────────────────────────────────────────────────────────────
+function updateAssignSelect() {
+  const sel = document.getElementById('assignFichier');
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">— Sélectionner un fichier —</option>';
+  allFichiers.forEach(f => {
+    const o = document.createElement('option');
+    o.value = f.nom; o.textContent = f.nom;
+    if (f.nom === cur) o.selected = true;
+    sel.appendChild(o);
+  });
+}
+
+async function addAssignation() {
+  const fichier     = document.getElementById('assignFichier').value;
+  const magasin     = document.getElementById('assignMagasin').value;
+  const departement = document.getElementById('assignDept').value;
+  const description = document.getElementById('assignDesc').value.trim();
+
+  if (!fichier) { showAlert('alertAssign','err','Sélectionne un fichier.'); return; }
+
+  const res  = await fetch('/api/documents/extra', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ fichier, magasin, departement, description }),
+  });
+  const data = await res.json();
+
+  if (res.status === 409) { showAlert('alertAssign','err','Cette assignation existe déjà.'); return; }
+  if (!data.success) { showAlert('alertAssign','err', data.error || 'Erreur.'); return; }
+
+  showAlert('alertAssign','ok','✓ Assignation ajoutée.');
+  document.getElementById('assignFichier').value = '';
+  document.getElementById('assignDesc').value = '';
+  await loadAssignations();
+}
+
+async function deleteAssignation(id) {
+  if (!confirm('Retirer cette assignation ?')) return;
+  await fetch(`/api/documents/extra/${id}`, { method:'DELETE' });
+  await loadAssignations();
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function showAlert(id, type, msg) {
+  const el = document.getElementById(id);
+  el.className = `alert alert-${type==='ok'?'ok':'err'}`;
+  el.textContent = msg;
+  el.style.display = 'block';
+  setTimeout(() => { el.style.display='none'; }, 4000);
+}
+function formatSize(bytes) {
+  if (bytes < 1024) return bytes + ' o';
+  if (bytes < 1024*1024) return Math.round(bytes/1024) + ' Ko';
+  return (bytes/(1024*1024)).toFixed(1) + ' Mo';
+}
+function formatDate(iso) {
+  return new Date(iso).toLocaleDateString('fr-CA', {day:'2-digit',month:'short',year:'numeric'});
+}
+function capitalize(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
+function escHtml(s) { return s.replace(/'/g,"\\'").replace(/"/g,'&quot;'); }
+</script>
+</body>
+</html>
